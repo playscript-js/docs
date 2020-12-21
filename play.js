@@ -90,7 +90,7 @@ class setup {
     objBody=new text(body,"90%").css({"padding-left":"5%","max-height":window.innerHeight-200+"px"})
     objButton=new button("OK",null, null, "silent").css("margin-left","auto").on("click",function(){obj.close();if(typeof call=="function")call()})
     objButtonlay=new flex("row","100%").add(objButton)
-    objBase=new flex("column","80%").css({"background":"var(--back)","border-radius":"8px","box-shadow":"0px 3px 10px 3px var(--shadow)"}).add(objTitle||"",objBody,objButtonlay)
+    objBase=new flex("column","80%").css({"max-width":"400px", "background":"var(--back)","border-radius":"8px","box-shadow":"0px 3px 10px 3px var(--shadow)"}).add(objTitle||"",objBody,objButtonlay)
     obj = new modal(objBase,"show");return obj}
 
   confirm(body,title,call){
