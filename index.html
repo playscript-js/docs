@@ -8,14 +8,14 @@
 
 <script>
   app = new setup
-  app.module("tab", "bar", "drawer")
+  app.module("bar", "drawer")
  app.ready(start)
  function start(e){
   l= new bar("Playscript", "noshadow")
   l.icons(0).on("click",function(){d.open()})
-  d=new drawer
+  d=new drawer()
   
-   app. alert("hello", "hi")
+   app.alert("welcome to playscript. the best ui for pure js development.", "PlayScript")
  }
   
 </script>
