@@ -5,6 +5,7 @@ class modal extends tag {
     this.class("play_modal").css({opacity:0,display:"flex","align-items":"center","justify-content":"center",width:"100%",height:"100%",top:"0px",position:"fixed","z-index":3,"background":"var(--shade)"})
     if(opt.includes("show"))this.open()
     if(opt.includes("fixed"))this.cancel(false);else this.cancel(true)
+    if(opt.includes("soft"))this.on("click", this. close. bind(this))
     if(child)this.add(child)
     body.css({"overflow":"hidden"})
     return this

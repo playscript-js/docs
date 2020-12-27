@@ -4,15 +4,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script src="play.js"></script>
 <script>
-app=new setup({"title":"Playscript test Suite. "})
-app. module("drawer", "bar")
-.ready(start)
-function start(e){
-  new bar("welcome")
-  b=new button("snack").on("tap", function(){d. open()}). on("swipedown", function(){app. snack("hi")})
-  d=new drawer()
-  body. add(b)
- 
+app = new setup
+app.module("menu")
+app.ready(start)
+function start(){
+  new menu("hi, hello, howya")
 }
 </script>
 
