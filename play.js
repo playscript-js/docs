@@ -59,7 +59,7 @@ class global {
   
 }
 /* creates an element */
-class tag extends global {constructor(id,w,h,opt){super(id,{type:"new"});this.css({ "-webkit-text-size-adjust": "100%","-webkit-tap-highlight-color": "rgba(0, 0, 0, 0)","font-family": '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',"font-size": "17px","font-weight": '400',"color":"var(--text)","display":"inline"});return this}}
+class tag extends global {constructor(id,w,h,opt){super(id,{type:"new"});this.css({ "-webkit-text-size-adjust": "100%","-webkit-tap-highlight-color": "rgba(0, 0, 0, 0)","font-family": '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',"font-size": "17px","font-weight": '400',"color":"var(--text)","display":"inline", width:w, height:h});return this}}
 /* binds an existing element as a playElement */
 class bind extends global {constructor(id,w,h,opt){super(id,{type:"bind"});return this}}
 /* clones an existing element as a playElement */
@@ -151,4 +151,3 @@ class play_utility{
   a() { alert("hi") }
 }
 util = new play_utility()
-  

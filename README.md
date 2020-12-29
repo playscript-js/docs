@@ -1,3 +1,3 @@
 # PlayScript
-PlayScript.js beta b0.01
-20.12.20
+PlayScript.js beta b0.15
+29.12.20
