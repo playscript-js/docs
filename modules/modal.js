@@ -6,6 +6,7 @@ class modal extends tag {
     if(opt.includes("show"))this.open()
     if(opt.includes("fixed"))this.cancel(false);else this.cancel(true)
     if(opt.includes("soft"))this.on("click", this. close. bind(this))
+    if(opt.includes("solid"))this.css("background","var(--back) ")
     if(child)this.add(child)
     body.css({"overflow":"hidden"})
     return this

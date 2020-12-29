@@ -80,7 +80,7 @@ class setup {
     
   }
   ready(start){window.addEventListener("load",function(e){head=new bind("head");body=new bind("body").css({"display":"flex","flex-direction":"column","align-items":"start","background":"var(--background)", "-webkit-text-size-adjust": "100%","-webkit-tap-highlight-color": "rgba(0, 0, 0, 0)","font-family": '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',"font-size": "17px","font-weight": '400',"color":"var(--text)","margin":"0px","padding":"0px","border":"300px blue"});start(e)});return this}
-  import(/**/){var args=arguments;for(let i=0;i<args.length;i++){ if(args[i].endsWith(".js")){ let dat=new tag("script").attr("src",args[i]);html.add(dat) }else if(args[i].endsWith(".css")){let dat=new tag("style").html(`@import url(${args[i]})`).css("display","none");html.add(dat)} }return this}
+  import(/**/){var args=arguments;for(let i=0;i<args.length;i++){ if(args[i].endsWith(".js")){ let dat=new tag("script").attr("src",args[i]).attr("id",args[i]. replaceAll(".js","").split("/")[args[i]. split("/"). length-1]);html.add(dat) }else if(args[i].endsWith(".css")){let dat=new tag("style").html(`@import url(${args[i]})`).css("display","none");html.add(dat)} }return this}
   module(/**/){var args=arguments;for(let i=0;i<args.length;i++){ this.import(`${this.root}modules/${args[i]}.js`) };return this}
   
   /* alerts */
@@ -108,7 +108,7 @@ class setup {
     if(title)objTitle=new text(title,"100%",null,"indent").css({color:"var(--accent)","font-size":"22px","box-shadow":"0px 0px 5px 3px var(--shadow)"})
     objBody=new edit(body,"90%").css({"padding-left":"5%","max-height":window.innerHeight-200+"px"})
     objButton=new button("cancel",null, null, "silent").css("margin-left","auto").on("click",function(){obj.close();if(typeof call=="function")call()})
-    ob2=new button("submit").on("click",function(){obj.close();if(typeof call=="function")call()})
+    ob2=new button("submit", null, null, "silent").on("click",function(){obj.close();if(typeof call=="function")call()})
     objButtonlay=new flex("row","100%").add(objButton, ob2)
     objBase=new flex("column","80%").css({"background":"var(--back)","border-radius":"8px","box-shadow":"0px 3px 10px 3px var(--shadow)"}).add(objTitle||"",objBody,objButtonlay)
     obj = new modal(objBase,"show");return obj}

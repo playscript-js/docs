@@ -5,10 +5,10 @@
 <script src="play.js"></script>
 <script>
 app = new setup
-app.module("menu")
+app.module("page", "slit")
 app.ready(start)
 function start(){
-  new menu("hi, hello, howya")
+  body.add(new button("open page"). on("click", function(){app. prompt("nico") ;new slit("hello, hi, howaya")}))
 }
 </script>
 

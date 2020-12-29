@@ -1,4 +1,14 @@
+
+
 class tab extends list{
+  constructor(lst)
+}
+
+
+
+
+
+/*class tab extends list{
   constructor(list,opt){
     opt=opt||"";list=list.split(",");var hold=list;list=[];for(var i=0;i<hold.length;i++){list.push({title:hold[i]})};var temp=new flex("row", "100%").align("center").justify("center").css({"padding":"14px 0px", "border-bottom":"2px solid transparent"}).bind("text=title")
     super(list, "100%",null, {temp:temp})
@@ -10,4 +20,4 @@ class tab extends list{
     this.select(function(e,h,m,d){var l=this.children();for(var i=0;i<l.length;i++){l[i].css({"color":"var(--text)", "border-bottom":"2px solid transparent"});var c=document.querySelector("#"+l[i].attr("child"));if(c){c.style.display="none";}};d.css({"color":"var(--accent) ", "border-bottom":"2px solid var(--accent)" });var c=document.querySelector("#"+d.attr("child"));if(c){c.style.display="block"} }) 
     if(!opt.includes("inline")){this.css({"position":"fixed","margin-top":"55px","top":"0px"});html.add(this);body.css("margin-top",106+"px")}
     return this
-    }}
+    }}*/
