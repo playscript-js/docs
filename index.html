@@ -8,34 +8,36 @@
 
 <script>
   app = new setup
-  app.module("bar", "drawer")
+  app.module("bar", "drawer","menu")
  app.ready(start)
  function start(e){
    //list misc
    datlist=[{t:"Introduction", b:"Build your first app in 5mins!"},
             {t:"Docs", b:"Learn all widgets that make ps tick"}, 
-            {t:"Going Native", b:"Step into the world of PWA's"}]
+            {t:"Going Native", b:"Step into the world of PWA's"},
+            {t:"Androidify",b:"Make AOSP apps on the go"}]
    temp=new flex("column", "100%").add(
-     new text("Title"). css({"padding":"3px"}). bind("text=t"), 
-     new text("description"). bind("text=b")
+     new text("Title"). css({"padding":"3px","color":"var(--accent)","font-size":"22px"}).bind("text=t"), 
+     new text("description").css({"padding":"3px"}).bind("text=b")
      
-     )
+     ).align("center").css({"padding":"15px 0px"})
    
    
    
    
   l= new bar("Playscript", "noshadow")
   l.icons(0).on("click",function(){d.open()})
+  l.icons(1).on("click",function(){new menu("terms,licsence,help,more","top,right")})
   d=new drawer
   
    body.add(
-     new text("Welcome.<br>PlayScript.js is a pure js uikit designed for mobile web apps in mind.<br>\
-     It's build with a simple UI design to fit into any supporting platform as a native app", "100%","200px", "html, center"), 
+     new text("<br><br>PlayScript.js is a pure js uikit designed for mobile web apps in mind.<br><br><br>\
+     <span style=\"color:var(--accent)\">It's build with a simple UI design to fit into any supporting platform as a native app</span>", "90%","200px", "html, center").css({"text-align":"center"}), 
      new button("watch tutorial", null, null, "elegant"), 
-     new list(datlist, null, null, {temp:temp})
+     new list(datlist, null, null, {temp:temp}).css({"padding":"18px 0px"})
      
      
-     ). css("align-items", "center")
+     ).css({"align-items":"center"})
  }
 </script>
 
