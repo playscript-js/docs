@@ -1,4 +1,4 @@
-function playscript_polyfill_list(list, w, h, opt) {
+function list(list, w, h, opt) {
     obj = new flex("column", "100%")
     opt = opt || {};obj.return="none"
   obj.push=function(dat,temp){
@@ -45,13 +45,7 @@ function playscript_polyfill_list(list, w, h, opt) {
   obj.select=function(call){ obj.callback=call;return obj}
     obj.temp=opt.temp||new text("listItem")
     obj.css({display:"flex","flex-direction":"column","align-items":"start"})
-    obj.getList=list||[];obj.list(obj.getList,opt.temp);obj.callback=function(e,h,d){console.log(e+" item clicked")};
+    obj.getList=list||[];obj.list(obj.getList,opt.temp);obj.callback=function(e,h,d){console.log(e+" item clicked");return obj};
     return obj
   
-}
-class list extends playscript_polyfill_list{
-  constructor(list,w,h,t){
-    super(list,w,h,t)
-    return this
-  }
 }

@@ -75,7 +75,7 @@ class setup {
     /* auto root finder */let list = document.querySelectorAll("script");for(let i=0;i<list.length;i++){let dat=list[i].src;if(dat.endsWith("play.js")){this.root=dat.split("/");this.root.pop();this.root=this.root.join("/")+"/";continue}};window.root=this.root
     /* set sites title */if(opt.title){let title= document.querySelector("title");if(title){title.innerText=opt.title}else{title=new tag("title").text(opt.title).css("display","none");html.add(title)}}
     this.import(this.root+"mdi/css/mdi.css")
-    this.module("events","button","edit","flex","image","modal","dialog","list","text")
+    this.module("events","button","edit","flex","image","modal","dialog","stringlist","text")
     return this
     
   }

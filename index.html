@@ -8,7 +8,7 @@
 
 <script>
   app = new setup
-  app.module("bar", "drawer","menu")
+  app.module("bar", "drawer","menu","page")
  app.ready(start)
  function start(e){
    //list misc
@@ -27,17 +27,21 @@
    
   l= new bar("Playscript", "noshadow")
   l.icons(0).on("click",function(){d.open()})
-  l.icons(1).on("click",function(){new menu("terms,licsence,help,more","top,right")})
+  l.icons(1).on("click",function(){m=new menu("terms,licsence,help,more","top,right")})
   d=new drawer
-  
+  li=new list(datlist, null, null, {temp:temp}).css({"padding":"18px 0px"})
+  lmi=new list(datlist, null, null, {temp:temp}).css({"padding":"18px 0px"})
+     
    body.add(
      new text("<br><br>PlayScript.js is a pure js uikit designed for mobile web apps in mind.<br><br><br>\
      <span style=\"color:var(--accent)\">It's build with a simple UI design to fit into any supporting platform as a native app</span>", "90%","200px", "html, center").css({"text-align":"center"}), 
-     new button("watch tutorial", null, null, "elegant"), 
-     new list(datlist, null, null, {temp:temp}).css({"padding":"18px 0px"})
+     new button("watch tutorial", null, null, "elegant"),li,lmi
      
      
      ).css({"align-items":"center"})
+     li.select(function(e,h,r,d){li.css("background","black");new page(r.t)})
+     lmi.select(function(e,h,r,d){lmi.css("background","black");new page(r.t)})
+     
  }
 </script>
 

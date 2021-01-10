@@ -1,0 +1,5 @@
+param e,h,r,d in stringlist
+e=position
+h=object reference
+r=object
+d=wink wink

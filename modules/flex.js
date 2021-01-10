@@ -1,9 +1,12 @@
 class flex extends tag {
-  constructor(dir,w,h,opt){
+  constructor(dir,w,h,opt,retag){
     opt=opt||"";
-    super("flex")
+    super(retag||"flex")
     this.css({width:w,height:h,display:"flex","flex-direction":dir||"column","align-items":"start","justify-content":"start"})
     if(opt.includes("scroll"))this.css("overflow","auto");else this.css("overflow","hidden")
+    if(opt.includes("right"))this.align("flex-end")
+    if(opt.includes("center"))this.align("center")
+    
     return this
   }
   direction(data){this.css("flex-direction",data);return this}
