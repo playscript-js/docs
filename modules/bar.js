@@ -14,4 +14,5 @@ class bar extends tag{
     if(opt.includes("noshadow"))this.css("box-shadow", "0px 0px 0px 0px transparent")
     return this
   }
+  label(e){this.search.hint(e);return this}
 }

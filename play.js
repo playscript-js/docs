@@ -26,7 +26,7 @@ class global {
   bind(/**/){var args=arguments;this.attr("binded","");for(let i=0;i<args.length;i++){this.attr("binded",this.attr("binded")+"&&"+args[i])}; return this}
   index(e){ var m=this.raw;var i = -1;while ((m = m.previousSibling) != null)i++;return i}
   parent(e){ return new ref(this.raw.parentElement) }
-  icon(e){if(e){this.add(new tag("icon").html('<i class="zmdi zmdi-' +e+'" ></i>').css({"margin":"auto", "color":"inherit"})) ;this.currentIcon=e;return this} else return this.currentIcon}
+  icon(e){var i="";if(e){this.add(i=new tag("icon").html('<i class="zmdi zmdi-' +e+'" ></i>').css({"margin":"auto", "color":"inherit"})) ;this.currentIcon=e;return i} else return this.currentIcon}
   icons(e){return new bind("#"+this.raw.querySelectorAll("icon")[e].getAttribute("id"))}
 
   /* experimental */
@@ -69,20 +69,35 @@ class ref extends global {constructor(id,w,h,opt){super(id,{type:"ref"});return 
 /* basic app setup */
 class setup {
   constructor(opt){
-    opt=opt||{}
+    opt=opt||{};this.debug=opt.debug||"none"
+    //debbugg
     html=new bind("html").cssvar({accent:store.psaccent,back:store.psback,shadow:store.psshadow,text:store.pstext,shade:store.psshade})
     html.cssvar({w:window.innerWidth+"px",h:window.innerHeight+"px"})
     /* auto root finder */let list = document.querySelectorAll("script");for(let i=0;i<list.length;i++){let dat=list[i].src;if(dat.endsWith("play.js")){this.root=dat.split("/");this.root.pop();this.root=this.root.join("/")+"/";continue}};window.root=this.root
     /* set sites title */if(opt.title){let title= document.querySelector("title");if(title){title.innerText=opt.title}else{title=new tag("title").text(opt.title).css("display","none");html.add(title)}}
     this.import(this.root+"mdi/css/mdi.css")
     this.module("events","button","edit","flex","image","modal","dialog","stringlist","text")
+    if(this.debug=="eruda")html.add(`<script src="https//cdn.jsdelivr.net/npm/eruda"></script>`)
     return this
     
+    
   }
-  ready(start){window.addEventListener("load",function(e){head=new bind("head");body=new bind("body").css({"display":"flex","flex-direction":"column","align-items":"start","background":"var(--background)", "-webkit-text-size-adjust": "100%","-webkit-tap-highlight-color": "rgba(0, 0, 0, 0)","font-family": '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',"font-size": "17px","font-weight": '400',"color":"var(--text)","margin":"0px","padding":"0px","border":"300px blue"});start(e)});return this}
+  ready(start){window.addEventListener("load",function(e){
+  //if(this.debug=="eruda")eruda.init()
+  head=new bind("head");body=new bind("body").css({"display":"flex","flex-direction":"column","align-items":"start","background":"var(--back)", "-webkit-text-size-adjust": "100%","-webkit-tap-highlight-color": "rgba(0, 0, 0, 0)","font-family": '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',"font-size": "17px","font-weight": '400',"color":"var(--text)","margin":"0px","padding":"0px","border":"300px blue"});start(e)});return this}
   import(/**/){var args=arguments;for(let i=0;i<args.length;i++){ if(args[i].endsWith(".js")){ let dat=new tag("script").attr("src",args[i]).attr("id",args[i]. replaceAll(".js","").split("/")[args[i]. split("/"). length-1]);html.add(dat) }else if(args[i].endsWith(".css")){let dat=new tag("style").html(`@import url(${args[i]})`).css("display","none");html.add(dat)} }return this}
   module(/**/){var args=arguments;for(let i=0;i<args.length;i++){ this.import(`${this.root}modules/${args[i]}.js`) };return this}
-  
+  hue(e){if(e){store.psaccent=e;html.cssvar("accent",e);return this}else return store.psaccent}
+  theme(back,text,shadow){
+    if(back&&text){store.pstheme="custom";store.psback=back;store.pstext=text;store.psshadow=shadow||store.psshadow;html.cssvar({back:store.psback,shadow:store.psshadow,text:store.pstext})
+    }else if(back=="light"){
+      store.pstheme="light";store.psback="#fcfcfced";store.pstext="#454545";store.psshadow="#00000055";html.cssvar({back:store.psback,shadow:store.psshadow,text:store.pstext})
+    }else if(back=="dark"){
+      store.pstheme="dark";store.psback="#232323ed";store.pstext="#efefef";store.psshadow="#00000055";html.cssvar({back:store.psback,shadow:store.psshadow,text:store.pstext})
+    }else if(back=="black"){
+      store.pstheme="black";store.psback="#000000ed";store.pstext="#fcfcfc";store.psshadow="#00000099";html.cssvar({back:store.psback,shadow:store.psshadow,text:store.pstext})
+    }else return store.pstheme
+  }
   /* alerts */
   alert(body,title,call){
     var obj,objTitle,objBody,objButtonlay, objButton,objBase;
@@ -97,25 +112,27 @@ class setup {
     var obj,objTitle,objBody,objButtonlay, objButton,ob2, objBase;
     if(title)objTitle=new text(title,"100%",null,"indent").css({color:"var(--accent)","font-size":"22px","box-shadow":"0px 0px 5px 3px var(--shadow)"})
     objBody=new text(body,"90%").css({"padding-left":"5%","max-height":window.innerHeight-200+"px"})
-    objButton=new button("cancel",null, null, "silent").css("margin-left","auto").on("click",function(){obj.close();if(typeof call=="function")call()})
-    ob2=new button("ok", null, null, "silent").on("click",function(){obj.close();if(typeof call=="function")call()})
+    objButton=new button("cancel",null, null, "silent").css("margin-left","auto").on("click",function(){obj.close();if(typeof call=="function")call(false)})
+    ob2=new button("ok", null, null, "silent").on("click",function(){obj.close();if(typeof call=="function")call(true)})
     objButtonlay=new flex("row","100%").add(objButton, ob2)
     objBase=new flex("column","80%").css({"background":"var(--back)","border-radius":"8px","box-shadow":"0px 3px 10px 3px var(--shadow)"}).add(objTitle||"",objBody,objButtonlay)
     obj = new modal(objBase,"show");return obj}
 
-    prompt(body,title,call){
+    prompt(body,title,call,opt){
+      opt=opt||""
     var obj,objTitle,objBody,objButtonlay, objButton,ob2, objBase;
     if(title)objTitle=new text(title,"100%",null,"indent").css({color:"var(--accent)","font-size":"22px","box-shadow":"0px 0px 5px 3px var(--shadow)"})
     objBody=new edit(body,"90%").css({"padding-left":"5%","max-height":window.innerHeight-200+"px"})
+    if(opt.includes("number"))objBody.attr("type","number")
     objButton=new button("cancel",null, null, "silent").css("margin-left","auto").on("click",function(){obj.close();if(typeof call=="function")call()})
-    ob2=new button("submit", null, null, "silent").on("click",function(){obj.close();if(typeof call=="function")call()})
+    ob2=new button("submit", null, null, "silent").on("click",function(){obj.close();if(typeof call=="function")call(objBody.text())})
     objButtonlay=new flex("row","100%").add(objButton, ob2)
     objBase=new flex("column","80%").css({"background":"var(--back)","border-radius":"8px","box-shadow":"0px 3px 10px 3px var(--shadow)"}).add(objTitle||"",objBody,objButtonlay)
     obj = new modal(objBase,"show");return obj}
 
 
     snack(title, call){
-      var obj=new flex("row"). css({"box-shadow":"0px 0px 10px 3px var(--shadow) ", "padding":"0px 6px", "background":"#232323", "position":"fixed", bottom:0,left:0,right:0, "transform":"translateY(100px)"}). animate({"transform":"translateY(0px)"},250). class("playsnack")
+      var obj=new flex("row"). css({"box-shadow":"0px 0px 10px 3px var(--shadow) ", "padding":"0px 6px", "background":"#232323", "position":"fixed", bottom:0,left:0,right:0, "transform":"translateY(100px)","z-index":5}). animate({"transform":"translateY(0px)"},250). class("playsnack")
       setTimeout(function(){obj.animate({"transform":"translateY(100px)"},150, null, function(){obj.remove()})}, 2500)
       var t=new text(title,"90%").css({color:"#cfcfcf"})
       var b=new text("ok", "10%").css({color:"var(--accent)"}). on("click", function(){if(typeof call=="function") call();else obj. remove()})
@@ -127,7 +144,7 @@ class setup {
 
 
 /* Misc */
-/* storage base setup */ store=window.localStorage;if(!store.psaccent)store.psaccent="#e91e63";if(!store.psback)store.psback="#fcfcfc";if(!store.pstext)store.pstext="#454545";if(!store.psshadow)store.psshadow="#00000055";if(!store.psshade)store.psshade="#55454545";
+/* storage base setup */ store=window.localStorage;if(!store.pstheme)store.pstheme="light";if(!store.psaccent)store.psaccent="#e91e63";if(!store.psback)store.psback="#fcfcfc";if(!store.pstext)store.pstext="#454545";if(!store.psshadow)store.psshadow="#00000055";if(!store.psshade)store.psshade="#55454545";
 /* request external text */function request(e){var f = new XMLHttpRequest();var m= null;f.open("GET", e, false);f.onreadystatechange = function (){if(f.readyState === 4){if(f.status === 200 || f.status == 0){var res= f.responseText;m= res}}};f.send(null);return m}
 /* cancel current dialog */window.addEventListener("popstate",function(){var mod=document.querySelectorAll(".play_modal");var mod2=new ref(mod[mod.length-1]);if(mod2.attr("cancel")=="true"){if(mod.length==1)body.css({"overflow":"auto"});mod2.animate({opacity:0},300,null,function(){mod2.remove()});}else history.pushState(null,null,null);})
 

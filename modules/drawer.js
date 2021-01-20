@@ -11,5 +11,5 @@ class drawer extends tag{
     html.on("swiperight", this.open.bind(this)) 
     return this
   }
-  close(){this.body.animate({"transform":"translateX(-100%)"},200,null, this.closefade.bind(this))}closefade(){this.animate({opacity:0},200, null, this. closedone. bind(this))}closedone(){this.css("display", "none")}open(e){try{let m=e.distance.x;m=e.x-m ;if(m<30){this.css("display", "block").animate({opacity :1},150);this.body.animate({transform:"translateX(0%)"},250)}} catch(e){this.css("display", "block").animate({opacity :1},150);this.body.animate({transform:"translateX(0%)"},250)}}
+  close(){body.css({"overflow":"auto"});this.body.animate({"transform":"translateX(-100%)"},200,null, this.closefade.bind(this))}closefade(){this.animate({opacity:0},200, null, this. closedone. bind(this))}closedone(){this.css("display", "none")}open(e){try{let m=e.distance.x;m=e.x-m ;if(m<60){body.css({"overflow":"hidden"});this.css("display", "block").animate({opacity :1},150);this.body.animate({transform:"translateX(0%)"},250)}} catch(e){this.css("display", "block").animate({opacity :1},150);this.body.animate({transform:"translateX(0%)"},250)}}
 }

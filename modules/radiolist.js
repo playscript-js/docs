@@ -1,6 +1,8 @@
-class stringlist extends flex{
+class radiolist extends flex{
   constructor(lst,w,h,opt){
-    super("column",w||"100%",h,null,"stringlist")
+    super("column",w||"100%",h,null,"radiolist")
+    /*convert lst string into obj*/
+    if(typeof lst=="string"){var mlst=lst.split(",");lst=[];for(var i=0;i<mlst.length;i++){lst.push({title:mlst[i]})}}
     /*defaults*/
     this.opt=opt||""
     this.call=function(e,h,r,d){console.log(e,h,r,d)}
@@ -26,15 +28,11 @@ class stringlist extends flex{
     temp.attr("onclick","this.id=true")
     return this}
     
-  pop(pos){this.listdata.splice(pos,1);this.list(this.listdata);return this}
+  pop(pos){return this}
   
   
   select(call){this.call=call;return this}
-  list(e){if(e){
-    this.listdata=[];this.empty()
-        /*convert lst string into obj*/
-    if(typeof e=="string"){var mlst=e.split(",");e=[];for(var i=0;i<mlst.length;i++){e.push({title:mlst[i]})}}
-    for(var i=0;i<e.length;i++){this.push(e[i])};return this}
+  list(e){if(e){for(var i=0;i<e.length;i++){this.push(e[i])};return this}
   else{return this.listdata}}
   hashtrue(){
     var m=this.raw.querySelector("#true")

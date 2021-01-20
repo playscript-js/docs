@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="play.js"></script>
+<script>
+  app = new setup({ title: "MerlusDB™" })
+  app.module("hero", "slit","menu", "drawer", "underweigh", "bar")
+  app.ready(start)
+
+  function start() {
+    if (store.mspdb) db = JSON.parse(store.mspdb);
+    else db = {"BF1":{ "Boxing": [], "Pulling": [] },
+              "BF2":{ "Boxing": [], "Pulling": [], "Knives": [], "Breakdown": [], "Memo": [] }}
+    cdb="BF1"
+    ctb=function(){return dlist.list()[dlist.highlighted].title.replace("BF1 ","").replace("BF2 ","")}
+
+
+    b = new bar("MerlusDB")
+    b.icons(0).on("click", function() { d.open() })
+    b.icons(1).on("click", function() {
+      new menu("Upload all files,Upload current file,Settings,Reset,Exit", "right,top", function(e, h) {
+        /*world menu*/
+        if (h == "Settings") new menu("Hue,Theme,Font", "top,right");
+      })
+    })
+    d = new drawer();
+    d.body.add(new hero("MerlusDB™", "100%", "200px", "bottom,right"), dlist = new stringlist("BF1 Boxing,BF1 Pulling,BF2 Boxing,BF2 Pulling,Knives,Breakdrown,Memo").select(function(e, h, d) {
+      if(h.title.includes("BF1"))cdb="BF1";else cdb="BF2"
+      if(e==0)mlist.list(db.BF1[h.title.replace("BF1 ","")]);
+      if(e==1)mlist.list(db.BF1[h.title.replace("BF1 ","")]);
+      if(e==2)mlist.list(db.BF2[h.title.replace("BF2 ","")]);
+      if(e==3)mlist.list(db.BF2[h.title.replace("BF2 ","")]);
+      if(e==4)mlist.list(db.BF2[h.title]);
+      if(e==5)mlist.list(db.BF2[h.title]);
+      if(e==6)mlist.list(db.BF2[h.title]);
+  
+      dlist.highlight(e);
+      b.label(h.title) }).css({ "padding": "15px 0px" }))
+    dlist.highlight(0);
+    b.label("BF1 Boxing")
+
+
+    u = new underweigh
+    u.title.add(new button("New Entry", null, null, "pill,silent").css({ "margin-left": "auto" }).on("click", function() {
+      var dat={}
+        if (dlist.highlighted == 4) new dialog("Add new note", new edit("note desc...", "95%", "150px", "multi").css({ "padding": "5px" }))
+
+
+/*boxing query*/
+if(dlist.highlighted==0||dlist.highlighted==2){
+  app.prompt("enter name",null,function(e){
+    if(e){dat.title=e;app.prompt("start time",null,function(e){if(e){
+      dat.st=e.replace(",",":").replace(".",":")
+      if(dat.st.length==4)dat.st="0"+dat.st
+      new dialog("Items missing?",l=new stringlist("yes,no").css({"padding":"10px 0px"}).select(function(e,h,d){l.highlight(e)}),function(e){
+       dat.im=l.list()[l.highlighted].title
+       new dialog("Knife code",l=new stringlist("I/F1,I/F2,I/F3,QC1,QC2,QC3").css({"padding":"10px 0px"}).select(function(e,h,d){l.highlight(e)}),function(e){
+       dat.kc=l.list()[l.highlighted].title
+       app.prompt("Mappa glove",null,function(e){
+         var hr,mn=0;
+         hr=dat.st.split(":")[0]-0
+         mn=dat.st.split(":")[1]-0
+         if(mn==30){
+           hr++
+           dat.et=hr+":"+"00"
+           if(hr.length==1)dat.et="0"+hr+":"+"00"
+         }else{
+          
+           dat.et=hr+":"+"30"
+           if(hr.length==1)dat.et="0"+hr+":"+"30"
+         }
+         dat.mg=e||"n/a";dat.body=dat.st+" - "+dat.et
+         db[cdb].Boxing.push(dat);sdb();mlist.push(dat)
+         app.snack("You're all set "+dat.title+".")
+         
+       })
+      })
+      l.highlight(1)
+      })
+      l.highlight(1)
+    }},"number")
+  }})
+}
+        
+
+/*pulling query*/
+        if (dlist.highlighted == 1||dlist.highlighted==3) app.prompt("enter name",null,function(e){
+          if(e){dat.title=e;app.prompt("start time",null,function(e){
+            if(e){dat.st=e.replace(".",":").replace(",",":");app.prompt("mappa code",null,function(e){
+              dat.mc=e||"n/a";dat.et="ongoing";dat.body=dat.st+" - "+dat.et
+              db[cdb].Pulling.push(dat);sdb();mlist.push(dat)
+              app.snack("happy pullings "+dat.title+".")
+            })}
+          },"number,insist")}
+        })
+        
+      
+    })).css({ "padding": "10px 0px" })
+    u.body.align("center").justify("center").css({ "background": "var(--back)" }).add(new text("coming soon", null, null, "accent"))
+
+
+
+    body.add(ney = new text("No entries yet.", "95%").css({ "text-align": "center", color: "var(--accent)" }), mlist = new stringlist(db.BF1.Boxing).select(function(e,h,d){new menu("Edit,Delete",null,function(e2,h2){
+      if(h2=="Edit"){
+        if(ctb()=="Boxing"){
+          new dialog(h.title,new flex("column").add(new stringlist([{title:"Knife code",body:h.kc},{title:"Mappa code",body:h.mg},{title:"Contition",body:h.con||"unknown"}])),null,"finnish")
+        }
+        if(ctb()=="Pulling"){
+          new dialog(h.title,new flex("column").add(new stringlist([{title:"Mappa code",body:h.mc},{title:"Contition",body:h.con||"unknown"}])),null,"finnish")
+        }
+      }
+      if(h2=="Delete")app.confirm(`Are you sure to delete ${h.title}'s post?`,null,function(e3){if(e3){db[cdb][ctb()].splice(e,1);mlist.pop(e);sdb()}})})}))
+    setInterval(function() { if (mlist.list().length == 0) ney.css("display", "inline");
+      else ney.css("display", "none") }, 100)
+  }
+
+  function sdb() {
+    store.mspdb = JSON.stringify(db)
+  }
+</script>
+
+</html>
