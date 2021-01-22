@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://www.gstatic.com/firebasejs/8.2.3/firebase.js"></script>
+
+<script>
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  var firebaseConfig = {
+    apiKey: "AIzaSyCkJTS2YR8rF2nBGflp3r4YsuSfcFoV27I",
+    authDomain: "msp-db.firebaseapp.com",
+    projectId: "msp-db",
+    storageBucket: "msp-db.appspot.com",
+    messagingSenderId: "1056691406446",
+    appId: "1:1056691406446:web:ddfdc5cbdd4e6f23f1887f",
+    measurementId: "G-SCJW2HFLBR",
+    databaseURL:"https://msp-db-default-rtdb.firebaseio.com/"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  fdb = firebase.database()
+  fpos=fdb.ref("pos")
+  firebase.analytics();
+</script>
+    <script src="play.js"></script>
+  <script>
+  req=request("mappa.html")
+  
+    app=new setup({title:"MerlusDB™ Admin"})
+    app.module("lodash","bar","drawer","menu","page","hero")
+    app.hue("#e91e63")
+    app.ready(start)
+    
+    function start(){
+      b=new bar("Infeed")
+      b.icons(0).on("click", function() { d.open() })
+
+      d=new drawer()
+      d.body.add(new hero("MerlusDB™ Admin","100%","200px","bottom,right"),dlist=new stringlist("line1,line2,line3,line4,infeed").css({padding:"10px 0px"}))
+      dlist.highlight(4)
+      
+      body.add(ney = new text("loading...", "95%").css({ "text-align": "center", color: "var(--accent)" }), mlist=new stringlist(null,null,"100%").select(function(e,h,d){num=e;new page(h.title).align("flex-start").add(new stringlist("BF1Boxing,BF1Pulling,BF2Boxing,BF2Pulling,Knives,Breakdown,Memo").select(function(e,h,d){
+        e=mlist.list()[num][h.title]
+        if(e==undefined)app.alert("No data entered here.");else{if(h.title.includes("Pulling")){
+          chnk=_.chunk(e,26);lst="file1"
+          for(var i=1;i<chnk.length;i++){
+            lst=lst+",file"+(i+1)}
+            new menu(lst,null,function(e,h,d){mappa(chnk[e])})
+
+          }else{app.alert("Only files for pulling available")}}
+             
+      }))}))
+      setInterval(function() { if (mlist.list().length == 0) ney.css("display", "inline");
+      else ney.css("display", "none") }, 100)
+      glist("infeed")
+      
+    }
+    function glist(e){
+      fpos.child(e).on("child_added",function(e){mlist.push(e.val(),0)})
+      
+    }
+    
+    function mappa(e){
+              req2=req.replace("code_leader",mlist.list()[num].body)
+              cnt=0
+              while(req2.includes("code_st")){
+                try{req2=req2.replace("code_st",e[cnt].st).replace("c_xx","2")}
+                catch(e){req2=req2.replace("code_st"," ").replace("c_xx"," ");console.log(e)}
+                cnt++
+              }
+              
+              req2.replace("code_date",mlist.list()[num].title.replaceAll("_"," "))
+              setTimeout(function(){m=new modal(null,"show").html("<div style='background:var(--back);width:1611.47px;height:936.627px;padding:10px;overflow:scroll;transform:scale(1);'>"+req2+"</div>");m.align("flex-start").css("overflow","scroll")},2000)
+    }
+  </script>
+</html>

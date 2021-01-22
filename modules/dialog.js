@@ -1,6 +1,6 @@
 class dialog extends modal{
   constructor(title,body,call,opt,okb){
-    super(null,"show")
+    super(" ","show")
     var obj,objTitle,objBody,objButtonlay, objButton,ob2, objBase;
     if(title)objTitle=new text(title,"100%",null,"indent").css({color:"var(--accent)","font-size":"22px","box-shadow":"0px 0px 5px 3px var(--shadow)"})
     objBody=new flex("column","100%").css({"max-height":window.innerHeight-250+"px",overflow:"scroll"}).add(body||"")

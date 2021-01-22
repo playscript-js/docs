@@ -1,7 +1,7 @@
-class modal extends tag {
+class modal extends flex {
   constructor(child,opt) {
     opt = opt || ""
-    super("modal")
+    super("column","100%","100%",null,"modal")
     this.class("play_modal").css({opacity:0,display:"flex","align-items":"center","justify-content":"center",width:"100%",height:"100%",top:"0px",position:"fixed","z-index":5,"background":"var(--shade)"})
     if(opt.includes("show"))setTimeout(this.open.bind(this),50)
     if(opt.includes("fixed"))this.cancel(false);else this.cancel(true)

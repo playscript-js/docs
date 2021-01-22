@@ -1,5 +1,5 @@
 class page extends flex{
-  constructor (title, opt){
+  constructor (title,opt){
     opt=opt||""
     super("column", "100%")
     
@@ -11,7 +11,7 @@ class page extends flex{
     if(opt. includes("menu")) this.bar.icon("more-vert")
     
     this.modal=new modal(null, "show,solid"). add(this.bar, this)
-    this. bar. icons(0).on("click",this. modal. close. bind(this. modal)) 
+    //this. bar. icons(0).on("click",this. modal. close. bind(this. modal)) 
     return this
   }
 }
