@@ -20,10 +20,12 @@
     storageBucket: "msp-db.appspot.com",
     messagingSenderId: "1056691406446",
     appId: "1:1056691406446:web:ddfdc5cbdd4e6f23f1887f",
-    measurementId: "G-SCJW2HFLBR"
+    measurementId: "G-SCJW2HFLBR",
+    databaseURL:"https://msp-db-default-rtdb.firebaseio.com/"
   };
   // Initialize Firebase
   firebase.initializeApp(firebaseConfig);
+  fdb = firebase.database().ref("pos/infeed")
   firebase.analytics();
 </script>
 <script src="play.js"></script>
@@ -33,47 +35,43 @@
   app.ready(start)
 
   function start() {
+    
     if (store.mspdb) db = JSON.parse(store.mspdb);
-    else db = {"BF1":{ "Boxing": [], "Pulling": [] },
-              "BF2":{ "Boxing": [], "Pulling": [], "Knives": [], "Breakdown": [], "Memo": [] }}
-    cdb="BF1"
-    ctb=function(){return dlist.list()[dlist.highlighted].title.replace("BF1 ","").replace("BF2 ","")}
+    else db = { "BF1Boxing": [], "BF1Pulling": [] , "BF2Boxing": [], "BF2Pulling": [], "Knives": [], "Breakdown": [], "Memo": [] }
+    cdb="BF1Boxing"
 
 
     b = new bar("MerlusDB")
     b.icons(0).on("click", function() { d.open() })
     b.icons(1).on("click", function() {
-      new menu("Save all files,Save current file,Reset all files,Reset current file,Settings,Exit", "right,top", function(e, h) {
+      new menu("Save,Reset all files,Reset current file,Settings,Exit", "right,top", function(e, h) {
         /*world menu*/
-        if(h=="Reset current file")app.confirm("this will delete all entries entered on this file, continue?","Warning",function(e){if(e){db[cdb][ctb()]=[];sdb();mlist.list([])}})
-        if(h=="Reset all files")app.confirm("your about to delete all entries entered today, make sure files are saved before deleting, continue?","Warning",function(e){if(e){db = {"BF1":{ "Boxing": [], "Pulling": [] },
-              "BF2":{ "Boxing": [], "Pulling": [], "Knives": [], "Breakdown": [], "Memo": [] }};sdb();mlist.list([])}})
+        if(h=="Save")app.prompt("Teamleader name",null,function(e){if(e){db.body=e;db.title=dater();fdb.limitToLast(1).once("child_added", function (s) {
+          //fdb.child(s.key).update({tl:e})
+   if(s.val().title==dater())app.confirm("Today's file has already been saved, do you want to update?","Warning",function(e){if(e){fdb.child(s.key).set(db,function(){app.alert("Successfully saved.")})}});else fdb.push(db,function(){app.alert("Successfully saved.")})
+  });
+}})
+        if(h=="Reset current file")app.confirm("this will delete all entries entered on this file, continue?","Warning",function(e){if(e){db[cdb]=[];sdb();mlist.list([])}})
+        if(h=="Reset all files")app.confirm("your about to delete all entries entered today, make sure files are saved before deleting, continue?","Warning",function(e){if(e){db = { "BF1Boxing": [], "BF1Pulling": [] , "BF2Boxing": [], "BF2Pulling": [], "Knives": [], "Breakdown": [], "Memo": [] };sdb();mlist.list([])}})
         if (h == "Settings") new menu("Hue,Theme,Font", "top,right",function(e,h){
           if(h=="Theme")new menu("light,dark,black","top,right",function(e,h){app.theme(h)})
         });
       })
     })
     d = new drawer();
-    d.body.add(new hero("MerlusDB™ Infeed", "100%", "200px", "bottom,right"), dlist = new stringlist("BF1 Boxing,BF1 Pulling,BF2 Boxing,BF2 Pulling,Knives,Breakdrown,Memo").select(function(e, h, d) {
-      if(h.title.includes("BF1"))cdb="BF1";else cdb="BF2"
-      if(e==0)mlist.list(db.BF1[h.title.replace("BF1 ","")]);
-      if(e==1)mlist.list(db.BF1[h.title.replace("BF1 ","")]);
-      if(e==2)mlist.list(db.BF2[h.title.replace("BF2 ","")]);
-      if(e==3)mlist.list(db.BF2[h.title.replace("BF2 ","")]);
-      if(e==4)mlist.list(db.BF2[h.title]);
-      if(e==5)mlist.list(db.BF2[h.title]);
-      if(e==6)mlist.list(db.BF2[h.title]);
-  
+    d.body.add(new hero("MerlusDB™ Infeed", "100%", "200px", "bottom,right"), dlist = new stringlist("BF1Boxing,BF1Pulling,BF2Boxing,BF2Pulling,Knives,Breakdrown,Memo").select(function(e, h, d) {
+      mlist.list(db[h.title]);
+      cdb=h.title
       dlist.highlight(e);
       b.label(h.title) }).css({ "padding": "15px 0px" }))
     dlist.highlight(0);
-    b.label("BF1 Boxing")
+    b.label("BF1Boxing")
 
 
     u = new underweigh
     u.title.add(new button("New Entry", null, null, "pill,silent").css({ "margin-left": "auto" }).on("click", function() {
       var dat={}
-        if (dlist.highlighted == 4) new dialog("Add new note", new edit("note desc...", "95%", "150px", "multi").css({ "padding": "5px" }))
+        if (dlist.highlighted == 6) new dialog("Add new note", new edit("note desc...", "95%", "150px", "multi").css({ "padding": "5px" }))
 
 
 /*boxing query*/
@@ -100,7 +98,7 @@ if(dlist.highlighted==0||dlist.highlighted==2){
            if(hr.length==1)dat.et="0"+hr+":"+"30"
          }
          dat.mg=e||"n/a";dat.body=dat.st+" - "+dat.et
-         db[cdb].Boxing.push(dat);sdb();mlist.push(dat)
+         db[cdb].push(dat);sdb();mlist.push(dat)
          app.snack("You're all set "+dat.title+".")
          
        })
@@ -120,7 +118,7 @@ if(dlist.highlighted==0||dlist.highlighted==2){
             if(dat.st.length==4)dat.st="0"+dat.st
             app.prompt("mappa code",null,function(e){
               dat.mc=e||"n/a";dat.et="ongoing";dat.body=dat.st+" - "+dat.et
-              db[cdb].Pulling.push(dat);sdb();mlist.push(dat)
+              db[cdb].push(dat);sdb();mlist.push(dat)
               app.snack("happy pullings "+dat.title+".")
             })}
           },"number,insist")}
@@ -132,30 +130,37 @@ if(dlist.highlighted==0||dlist.highlighted==2){
 
 
 
-    body.add(ney = new text("No entries yet.", "95%").css({ "text-align": "center", color: "var(--accent)" }), mlist = new stringlist(db.BF1.Boxing).select(function(e,h,d){new menu("View,Delete",null,function(e2,h2){
+    body.add(ney = new text("No entries yet.", "95%").css({ "text-align": "center", color: "var(--accent)" }), mlist = new stringlist(db.BF1Boxing).select(function(e,h,d){new menu("View,Delete",null,function(e2,h2){
       var num=e
       if(h2=="View"){
-        if(ctb()=="Boxing"){
+        if(cdb.includes("Boxing")){
           new dialog(h.title,new flex("column").add(new stringlist([{title:"Start time",body:h.st},{title:"End time",body:h.et},{title:"Knife code",body:h.kc},{title:"Mappa code",body:h.mg},{title:"Mappa condition",body:h.con||"good"}])),null,null,"edit")
         }
-        if(ctb()=="Pulling"){
+        if(cdb.includes("Pulling")){
           new dialog(h.title,new flex("column").add(new stringlist([{title:"Start time",body:h.st},{title:"End time",body:h.et},{title:"Mappa code",body:h.mc},{title:"Mappa condition",body:h.con||"good"}])),function(e){
             if(e){
               if(h.et=="ongoing")app.prompt("end time",null,function(e){
-                db[cdb][ctb()][num].et=e.replace(",",":").replace(".",":")
-                if(db[cdb][ctb()][num].et.length==4)db[cdb][ctb()][num].et="0"+db[cdb][ctb()][num].et;db[cdb][ctb()][num].body=db[cdb][ctb()][num].st+" - "+db[cdb][ctb()][num].et;sdb();mlist.list(db[cdb][ctb()])
+                db[cdb][num].et=e.replace(",",":").replace(".",":")
+                if(db[cdb][num].et.length==4)db[cdb][num].et="0"+db[cdb][num].et;db[cdb][num].body=db[cdb][num].st+" - "+db[cdb][num].et;sdb();mlist.list(db[cdb])
               },"number")
             }
           },null,h.et=="ongoing"?"finnish":"edit")
         }
       }
-      if(h2=="Delete")app.confirm(`Are you sure to delete ${h.title}'s post?`,null,function(e3){if(e3){db[cdb][ctb()].splice(e,1);mlist.pop(e);sdb()}})})}))
+      if(h2=="Delete")app.confirm(`Are you sure to delete ${h.title}'s post?`,null,function(e3){if(e3){db[cdb].splice(e,1);mlist.pop(e);sdb()}})})}))
     setInterval(function() { if (mlist.list().length == 0) ney.css("display", "inline");
       else ney.css("display", "none") }, 100)
   }
 
   function sdb() {
     store.mspdb = JSON.stringify(db)
+  }
+  function dater(){
+    var Dat=new Date()
+    var d=Dat.getDate()
+    var m=Dat.getMonth()+1
+    var y=Dat.getFullYear()
+    return d+"_"+m+"_"+y
   }
 </script>
 

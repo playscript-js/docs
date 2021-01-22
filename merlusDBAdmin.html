@@ -64,7 +64,7 @@
     function mappa(e){
             alert(JSON.stringify(e))
               req2=req.replace("code_leader",mlist.list()[num].body)
-              req2=req.replace("code_date",mlist.list()[num].title.replace("_"," "))
+              req2=req2.replace("code_date",mlist.list()[num].title.replaceAll("_"," "))
               cnt=0
               while(req2.includes("code_st")){
                 try{req2=req2.replace("code_st",e[cnt].st).replace("c_xx","2")}
@@ -76,6 +76,13 @@
               while(req2.includes("code_mc")){
                 try{req2=req2.replace("code_mc",e[cnt].mc).replace("code_con","Good")}
                 catch(e){req2=req2.replace("code_mc"," ").replace("code_con"," ");console.log(e)}
+                cnt++
+              }
+              
+                  cnt=0
+              while(req2.includes("code_et")){
+                try{req2=req2.replace("code_et",e[cnt].et)}
+                catch(e){req2=req2.replace("code_et"," ");console.log(e)}
                 cnt++
               }
               
