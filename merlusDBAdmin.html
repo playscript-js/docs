@@ -40,7 +40,7 @@
       d.body.add(new hero("MerlusDB™ Admin","100%","200px","bottom,right"),dlist=new stringlist("line1,line2,line3,line4,infeed").css({padding:"10px 0px"}))
       dlist.highlight(4)
       
-      body.add(ney = new text("loading...", "95%").css({ "text-align": "center", color: "var(--accent)" }), mlist=new stringlist(null,null,"100%").select(function(e,h,d){num=e;new page(h.title).align("flex-start").add(new stringlist("BF1Boxing,BF1Pulling,BF2Boxing,BF2Pulling,Knives,Breakdown,Memo").select(function(e,h,d){
+      body.add(ney = new text("loading...", "95%").css({ "text-align": "center", color: "var(--accent)" }), mlist=new stringlist(null,null,"100%").select(function(e,h,d){num=e;new page(h.title).align("flex-start").add(new stringlist("BF1Boxing,BF1Pulling,BF2Boxing,BF2Pulling,Knives,Breakdown,Memo","100%","100%").select(function(e,h,d){
         e=mlist.list()[num][h.title]
         if(e==undefined)app.alert("No data entered here.");else{if(h.title.includes("Pulling")){
           chnk=_.chunk(e,26);lst="file1"
@@ -57,12 +57,12 @@
       
     }
     function glist(e){
-      fpos.child(e).on("child_added",function(e){mlist.push(e.val(),0)})
+      fpos.child(e).on("child_added",function(e){mlist.push(e.val())})
       
     }
     
     function mappa(e){
-            alert(JSON.stringify(e))
+           
               req2=req.replace("code_leader",mlist.list()[num].body)
               req2=req2.replace("code_date",mlist.list()[num].title.replaceAll("_"," "))
               cnt=0
