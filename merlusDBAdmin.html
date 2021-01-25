@@ -68,7 +68,7 @@
   }
 
   function glist(e) {
-    fpos.child(e).on("child_added", function(e) { mlist.push(e.val()) })
+    fpos.child(e).on("child_added", function(e) { mlist.push(e.val(),0) })
 
   }
 

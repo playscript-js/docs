@@ -11,7 +11,7 @@ class stringlist extends flex{
   push(obj,pos,rep){
     var img,title,body,icon,misc=""
     if(typeof obj!="object")obj={title:obj};
-      if(!pos)this.listdata.push(obj);else this.listdata.splice(pos,rep?1:0,obj)
+      if(typeof pos=="undefined")this.listdata.push(obj);else this.listdata.splice(pos,rep?1:0,obj)
     title=obj.title?new text(obj.title).css({"color":"var(--text)","font-size":obj.body?"17px":"17px","padding":"3px"}):""
     body=obj.body?new text(obj.body).css({padding:"3px",opacity:.5}):""
     img=obj.img?new image(obj.img,"56px","56px").css({"padding":"4px","border-radius":"100px","box-shadow":"0px 0px 3px 2px var(--shadow)"}):""
