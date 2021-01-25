@@ -5,10 +5,12 @@
 <script src="play.js"></script>
 <script>
 app = new setup
-app.module("details")
+app.module("loader")
 app.ready(start)
 function start(){
-new dialog("helo",new stringlist("0000,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9,0,0,0,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,000"))
+body.add(new loader)
+  
+  
 }
 
 </script>

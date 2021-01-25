@@ -130,7 +130,7 @@ if(dlist.highlighted==0||dlist.highlighted==2){
 
 
 
-    body.add(ney = new text("No entries yet.", "95%").css({ "text-align": "center", color: "var(--accent)" }), mlist = new stringlist(db.BF1Boxing).select(function(e,h,d){new menu("View,Delete",null,function(e2,h2){
+    body.add(ney = new text("No entries yet.", "95%").css({ "text-align": "center", color: "var(--accent)" }), mlist = new stringlist(db.BF1Boxing).css({"margin-bottom":"100px"}).select(function(e,h,d){new menu("View,Delete",null,function(e2,h2){
       var num=e
       if(h2=="View"){
         if(cdb.includes("Boxing")){

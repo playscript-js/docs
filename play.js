@@ -83,10 +83,14 @@ class setup {
     
   }
   ready(start){window.addEventListener("load",function(e){
-  //if(this.debug=="eruda")eruda.init()
-  head=new bind("head");body=new bind("body").css({"display":"flex","flex-direction":"column","align-items":"start","background":"var(--back)", "-webkit-text-size-adjust": "100%","-webkit-tap-highlight-color": "rgba(0, 0, 0, 0)","font-family": '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',"font-size": "17px","font-weight": '400',"color":"var(--text)","margin":"0px","padding":"0px","border":"300px blue"});start(e)});return this}
+  /*try{new modal}catch(e){location.reload();}
+  try{new dialog().remove()}catch(e){alert(e)}
+  try{new stringlist}catch(e){alert(e)}*/
+  head=new bind("head");body=new bind("body").css({"display":"flex","flex-direction":"column","align-items":"start","background":"var(--back)", "-webkit-text-size-adjust": "100%","-webkit-tap-highlight-color": "rgba(0, 0, 0, 0)","font-family": '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',"font-size": "17px","font-weight": '400',"color":"var(--text)","margin":"0px","padding":"0px","border":"300px blue"});start(e)
+    
+  });return this}
   import(/**/){var args=arguments;for(let i=0;i<args.length;i++){ if(args[i].endsWith(".js")){ let dat=new tag("script").attr("src",args[i]).attr("id",args[i]. replaceAll(".js","").split("/")[args[i]. split("/"). length-1]);html.add(dat) }else if(args[i].endsWith(".css")){let dat=new tag("style").html(`@import url(${args[i]})`).css("display","none");html.add(dat)} }return this}
-  module(/**/){var args=arguments;for(let i=0;i<args.length;i++){ this.import(`${this.root}modules/${args[i]}.js`) };return this}
+  module(/**/){var args=arguments;for(let i=0;i<args.length;i++){ this.import(`${this.root}modules/${args[i]}.js`)};return this}
   hue(e){if(e){store.psaccent=e;html.cssvar("accent",e);return this}else return store.psaccent}
   theme(back,text,shadow){
     if(back&&text){store.pstheme="custom";store.psback=back;store.pstext=text;store.psshadow=shadow||store.psshadow;html.cssvar({back:store.psback,shadow:store.psshadow,text:store.pstext})

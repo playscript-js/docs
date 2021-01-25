@@ -4,7 +4,7 @@ class button extends tag {
     super("button")
     if(opt.includes("html"))this.html(text||"");else if(opt.includes("mdi"))this.icon(text);else this.text(text||"")
     this.css({"outline":"none", "width":w,"height":h,"font-size":"19px","border":"2px solid transparent","text-align":"center","background":"var(--accent)","color":"white","border-radius":"8px","padding":"12px 14px","margin":"8px"})
-    if(opt.includes("silent"))this.css({color:"var(--accent)", background:"transparent"})
+    if(opt.includes("silent"))this.css({color:"var(--accent)", background:"var(--back)"})
     if(opt.includes("outline"))this.css({color:"var(--accent)", background:"transparent", "border":"2px solid var(--accent) "})
     if(opt.includes("blur"))this.css({"box-shadow":"0px 0px 6px 3px var(--accent) "})
     if(opt.includes("shadow"))this.css({"box-shadow":"0px 4px 8px 1px var(--shadow) "})

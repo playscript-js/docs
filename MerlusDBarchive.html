@@ -130,7 +130,7 @@ if(dlist.highlighted==0||dlist.highlighted==2){
 
 
 
-    body.add(ney = new text("No entries yet.", "95%").css({ "text-align": "center", color: "var(--accent)" }), mlist = new stringlist(db.BF1Boxing).select(function(e,h,d){new menu("View,Delete",null,function(e2,h2){
+    body.add(ney = new text("No entries yet.", "95%").css({ "text-align": "center", color: "var(--accent)" }), mlist = new stringlist(db.BF1Boxing).css({"margin-bottom":"100px"}).select(function(e,h,d){new menu("View,Delete",null,function(e2,h2){
       var num=e
       if(h2=="View"){
         if(cdb.includes("Boxing")){
@@ -147,7 +147,7 @@ if(dlist.highlighted==0||dlist.highlighted==2){
           },null,h.et=="ongoing"?"finnish":"edit")
         }
       }
-      if(h2=="Delete")app.confirm(`Are you sure to delete ${h.title}'s post?`,null,function(e3){if(e3){db[cdb][ctb()].splice(e,1);mlist.pop(e);sdb()}})})}))
+      if(h2=="Delete")app.confirm(`Are you sure to delete ${h.title}'s post?`,null,function(e3){if(e3){db[cdb].splice(e,1);mlist.pop(e);sdb()}})})}))
     setInterval(function() { if (mlist.list().length == 0) ney.css("display", "inline");
       else ney.css("display", "none") }, 100)
   }
