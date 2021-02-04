@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<script src="play.js"></script>
+<script>
+
+  app = new setup({
+    title:"Audioluv",
+    theme:"dark",
+    type:"matte"
+  })
+  
+  function start(e) {
+    app.theme("light")
+
+        b=new bar("AudioLuv")
+        b.drawer("home,settings,more",function(e,h){alert(h.title)})
+        b.menu("theme,hue,settings,help")
+  }
+</script>
+
+</html>

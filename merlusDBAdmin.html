@@ -83,7 +83,7 @@
      }
       cnt++
     }
-
+)
     cnt = 0
     while (req2.includes("code_mc")) {
       try { req2 = req2.replace("code_mc", e[cnt].mc).replace("code_con", "Good") }
@@ -114,7 +114,7 @@
       m.align("flex-start").css("overflow", "hidden").add(
         new button("Print",null,null,"silent,shadow").css({position:"fixed",bottom:"70px",right:0}).on("click",function(){
           app.snack("Converting to printable format...")
-          html.add(x4=new clone(m.child(0)).css({overflow:"visible",height:"1150px"}))
+          x4=new clone(m.child(0)).css({overflow:"visible",height:"1150px"})
         html2canvas(x4.raw).then(function(canvas) {
           x4.remove()
         //document.body.appendChild(canvas);
@@ -128,7 +128,7 @@
         }),
         new button("Download",null,null,"silent,shadow").css({position:"fixed",bottom:0,right:0}).on("click",function(){
         app.snack("Starting download process...")
-        html.add(x4=new clone(m.child(0)).css({overflow:"visible",}))
+        x4=new clone(m.child(0)).css({overflow:"visible",})
         html2canvas(x4.raw).then(function(canvas) {
         x4.remove()
         var link = document.createElement("a");
