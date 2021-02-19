@@ -14,6 +14,7 @@ class bar extends tag{
     html.add(this);body.css("margin-top",Number(this.css("height").replace("px",""))+4+"px")
     
     if(opt.includes("noshadow"))this.css("box-shadow", "0px 0px 0px 0px transparent")
+    if(opt.includes("transparent"))this.css("background", "transparent")
     return this
   }
   label(e){this.search.hint(e);return this}

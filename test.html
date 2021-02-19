@@ -2,13 +2,12 @@
 <html>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<script src="play.js"></script>
+<script src="backup/play.js"></script>
 <script>
 app = new setup
-app.module("loader")
-app.ready(start)
 function start(){
-body.add(new edit("time").type("time"))
+b=app.read("mu.json")
+alert(b)
   
   
 }

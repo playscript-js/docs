@@ -14,7 +14,7 @@ class text extends tag {
     if(opt.includes("space"))this.css("padding","14px 18px")
     if(opt.includes("accent"))this.css("color","var(--accent)")
 
-    this.css({width:w,height:h,padding:"14px 8px"})
+    this.css({width:w,height:h,padding:"8px"})
     return this
   }
 }

@@ -1,6 +1,6 @@
-class stringlist extends tag{
+class accordian extends flex{
   constructor(lst,w,h,opt){
-    super("stringlist",w||"100%",h,null,"stringlist")
+    super("column",w||"100%",h,null,"accordian").align("center")
     /*defaults*/
     this.opt=opt||""
     this.call=function(e,h,r,d){console.log(e,h,r,d)}
@@ -10,16 +10,21 @@ class stringlist extends tag{
   }
   push(obj,pos,rep){
     var img,title,body,icon,misc=""
-    if(typeof obj!="object")obj={title:obj};
+   
+   /*
+   super("details",w,h)
+    this.css({margin:"10px 7px",padding:"10px 7px","border-radius":"8px","box-shadow":"0px 0px 5px 5px var(--shadow)"})
+    this.sum=new tag("summary","100%").text(sum||"info").css({outline:"none"})
+    this.details=new flex("column","100%").add(det||"")
+    this.add(this.sum,this.details)
+
+   */
+   
+    if(typeof obj!="object")obj={body:obj};
       if(typeof pos=="undefined")this.listdata.push(obj);else this.listdata.splice(pos,rep?1:0,obj)
-    title=obj.title?new text(obj.title).css({"color":"var(--text)","font-size":obj.body?"17px":"17px","padding":"3px"}):""
-    body=obj.body?new text(obj.body).css({padding:"3px",opacity:.5}):""
-    img=obj.img?new image(obj.img,obj.body?"48px":"25px",obj.body?"48px":"25px").css({"margin":"4px","border-radius":"100px"}):""
-    var temp=new flex("row","100%",null,null,"listitem").css({"padding":"4px"}).add(
-      img,
-      new flex("column","100%").add(title,body)
-      
-      ).align("center").attr({id:"false"})
+    title=new tag("summary","100%").text(obj.title?obj.title:obj.body.length>10?obj.body.slice(0,11)+"...":obj.body).css({outline:"none"})
+    body =new flex("column","100%").add(obj.body)
+    var temp=new tag("details","90%").css({margin:"10px 7px",padding:"10px 7px","border-radius":"8px","box-shadow":"0px 0px 5px 5px var(--shadow)"}).add(title,body).attr({id:"false"})
       
     if(rep)this.remove(pos)
     this.ins(temp,pos)
@@ -33,7 +38,7 @@ class stringlist extends tag{
   list(e){if(e){
     this.listdata=[];this.empty()
         /*convert lst string into obj*/
-    if(typeof e=="string"){var mlst=e.split(",");e=[];for(var i=0;i<mlst.length;i++){e.push({title:mlst[i]})}}
+    if(typeof e=="string"){var mlst=e.split(",");e=[];for(var i=0;i<mlst.length;i++){e.push({body:mlst[i]})}}
     for(var i=0;i<e.length;i++){this.push(e[i])};return this}
   else{return this.listdata}}
   hashtrue(){

@@ -3,19 +3,26 @@
 <script src="play.js"></script>
 <script>
 
-  app = new setup({
-    title:"Audioluv",
-    theme:"dark",
-    type:"matte"
-  })
+    app=new setup({
   
-  function start(e) {
-    app.theme("light")
-
-        b=new bar("AudioLuv")
-        b.drawer("home,settings,more",function(e,h){alert(h.title)})
-        b.menu("theme,hue,settings,help")
-  }
+      import:"note,fab,tab",
+      type:"matte",
+      theme:"dark"
+    })
+    function start(e){
+      b=new bar("playOS™")
+      b.menu("theme",(e,h)=>{if(h=="theme")app.theme("toggle")})
+      s=new tab("home,setup,more")
+      l=new stringlist
+      l.select(e=>{app.toast(e)})
+      e="0"
+      while(e<20){
+        l.push({title:e,body:"body",img:".png"})
+        e++
+      }
+      body.add(l)
+      console.log(new Audio)
+    }
 </script>
 
 </html>

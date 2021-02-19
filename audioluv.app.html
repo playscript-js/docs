@@ -1,22 +1,261 @@
 <!DOCTYPE html>
 <html>
-
-
-    <meta charapp="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="play.js" ></script>
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="backup/play.js"></script>
 <script>
-
-
-
-  app=new setup({
-    title:"AudioLuv",
-    import:"bar"
+  set = new setup({
+    title: "AudioLuv",
+    theme: "dark",
+    type: "matte",
+    import: "underweigh,lodash"
   })
- 
-  function start(e){
-    b = new bar("AudioLuv")
+  set.script("wave.js")
+
+  //startup media parse
+  mem=window.localStorage;
+  savedata = (e, h) => { mem.csong=e;if (h) mem.cque= JSON.stringify(h) }
+  cseq = mem.cseq||[]
+  csong = mem.csong-0||0
+  cque = JSON.parse(mem.cque||"[]");
+  bque = JSON.parse(mem.bque||"[]");
+  mp = new Audio
+  mp.id = "hello"
+  mp.onplay = () => { 
+    pilltitle.css("color", "var(--accent)");
+    stt.css("color", "var(--accent)") }
+  mp.onpause = () => { 
+    pilltitle.css("color", "var(--text)");
+    stt.css("color", "var(--text)") }
+  mp.onerror = (e, h) => {}
+  mp.onended = (e) => { if (cseq == 1) { if (csong == cque.length - 1) csong = 0;
+      else csong++ };
+    pilltitle.text(cque[csong].title);
+    stt.text(cque[csong].title);
+    sta.text(cque[csong].body);
+    savedata(csong, cque);
+    tlui.highlight(_.findIndex(bque, cque[csong]));
+    mp.src = cque[csong].uri;
+    mp.play() }
+  //sleep ctrl
+
+  actsleep = false;
+  csleep = 0;
+  sleep = x => { actsleep = true;
+    csleep = x;
+    msleep = setInterval(() => { if (csleep < 1) app.Exit();
+      else { csleep -= 1000;
+        mp.volume = csleep / x } }, 1000) }
+  trackmedia=function(e) {
+    tracklist = JSON.parse(set.read("mu.json"))
+    tlui.list(tracklist)
+    alert(JSON.stringify(tracklist))
+    u.body.add(st = new flex("column", "100%", "100%").add(stt = new text("AudioLuv").css({ "font-size": "25px", "text-align": "center" }), sta = new text("One stop music spot.")).align("center").justify("center"),
+      canvas = new tag("canvas", "110%").on("tap", () => { if (st.css("display") == "none") { u.body.animate({ background: "var(--back)", transform: "scale(1)" }, 300);
+          st.css("display", "flex");
+          se.css("display", "flex"); } else { u.body.animate({ background: "#000000", transform: "scale(1.35)" }, 300);
+          st.css("display", "none");
+          se.css("display", "none") } }),
+      se = new flex("row", "100%", "100%").align("center").justify("center").add(
+        new flex("column", "25px", "25px", "html").css({ "margin": "auto", "border-radius": "100px", "box-shadow": "0px 0px 5px 5px var(--shadow)" }).on("tap", () => {
+          new page("current qeue", new stringlist(cque).select((e, h, d) => { history.back();
+            csong = e;
+            pilltitle.text(cque[csong].title);
+            stt.text(cque[csong].title);
+            sta.text(cque[csong].body);
+            savedata(csong, cque);
+            tlui.highlight(_.findIndex(bque, cque[csong]));
+            mp.src = cque[csong].uri;
+            mp.play() }))
+        }),
+        hype = new flex("column", "40%", "40px").css({ "border-radius": "40px", "box-shadow": "0px 0px 5px 5px var(--shadow)" }).on("tap", () => { hype.css({ background: "var(--accent)" }).animate({ background: "var(--back)" }, 300); if (mp.paused) mp.play();
+          else mp.pause() }),
+        new flex("column", "25px", "25px", "html").css({ "margin": "auto", "border-radius": "100px", "box-shadow": "0px 0px 5px 5px var(--shadow)" }).on("tap", () => {
+          set.slit("lyrics,AudioVisuals™,shuffle current qeue", (e, h) => {
+            et = cque[csong];
+            etp = csong;
+
+
+            //csong album rem
+            if (h == "view album") { aque = _.filter(bque, ["body", et.body]);
+              new page(et.body, new stringlist(aque).select((e, h, d) => { cque = aque;
+                csong = e;
+                savedata(cque, csong);
+                history.back();
+                csong = e;
+                pilltitle.text(cque[csong].title);
+                stt.text(cque[csong].title);
+                sta.text(cque[csong].body);
+                savedata(csong, cque);
+                tlui.highlight(_.findIndex(bque, cque[csong]));
+                mp.src = cque[csong].uri;
+                mp.play() })) }
+
+            //ubody.shuffle inst
+            if (h == "shuffle current qeue") { cque = _.shuffle(cque);
+              csong = _.findIndex(cque, et);
+              savedata(csong, cque);
+              set.toast("playlist shuffled") }
+
+            //ubody switch visuals
+            if (h == "AudioVisuals™") new menu("none,big bars,dualbars,dualbars blocks,fireworks,flower,flower blocks,orbs,ring,rings,round wave,shine,shine rings,shockwave,star,static,stitches,web", null, (e, h) => { window.localStorage.av = h; if (h == "none") { canvas.remove();
+                canvas = new tag("canvas", "110%").on("tap", () => { if (st.css("display") == "none") { u.body.animate({ background: "var(--back)", transform: "scale(1)" }, 300);
+                    st.css("display", "flex");
+                    se.css("display", "flex"); } else { u.body.animate({ background: "#000000", transform: "scale(1.35)" }, 300);
+                    st.css("display", "none");
+                    se.css("display", "none") } });
+                u.body.ins(canvas, 1) } else { mp.pause();
+                wave = new Wave();
+                wave.fromElement("hello", canvas.id, { type: h, colors: ["#e91e63"] });
+                mp.play() } })
+
+
+            //ubody delete
+            if (h == "delete") set.confirm("Are you sure to delete " + et.title, null, (e) => {
+              if (e) {
+                app.DeleteFile(et.uri);
+                bque.splice(et.pos, 1);
+                mx = etp;
+                while (typeof bque[mx] == "object") { bque[mx].pos = bque[mx].pos - 1;
+                  mx++ }
+                tlui.list(bque);
+                app.SaveText("bque", JSON.stringify(bque), "aud");
+                cque.splice(etp, 1);
+                mx = et.pos;
+                while (typeof cque[mx] == "object") { cque[mx].pos = cque[mx].pos - 1;
+                  mx++ }
+                savedata(csong, cque)
+              }
+            });
+
+          })
+        }))).align("center").justify("center").on("swipeup", () => { hype.css({ background: "var(--accent)" }).animate({ background: "var(--back)" }, 300); if (cseq == 1) { rep.text("set on repeat.");
+        mem.cseq=2
+        set.toast("Set on repeat.");
+        cseq = 2 } else { rep.text("set on normal play.");
+        mem.cseq=1
+        set.toast("Set on normal play.");
+        cseq = 1 } }).on("swiperight", () => { hype.css({ background: "var(--accent)" }).animate({ background: "var(--back)" }, 300); if (csong == cque.length - 1) csong = 0;
+      else csong++;
+      pilltitle.text(cque[csong].title);
+      stt.text(cque[csong].title);
+      sta.text(cque[csong].body);
+      savedata(csong);
+      tlui.highlight(_.findIndex(bque, cque[csong]));
+      mp.src = cque[csong].uri;
+      mp.play() }).on("swipeleft", () => { hype.css({ background: "var(--accent)" }).animate({ background: "var(--back)" }, 300); if (mp.currentTime < 4) { if (csong == 0) csong = cque.length - 1;
+        else csong--; } pilltitle.text(cque[csong].title);
+      stt.text(cque[csong].title);
+      sta.text(cque[csong].body);
+      savedata(csong);
+      tlui.highlight(_.findIndex(bque, cque[csong]));
+      mp.src = cque[csong].uri;
+      mp.play() })
+    if (window.localStorage.av != "none") {
+      wave = new Wave()
+      wave.fromElement("hello", canvas.id, {
+        type: window.localStorage.av || "flower",
+        colors: ["#e91e63"]
+      })
+    }
+
+
+    if (JSON.stringify(bque) == JSON.stringify(tracklist)) {
+      tlui.highlight(_.findIndex(bque, cque[csong]))
+      mp.src = cque[csong].uri
+      pilltitle.text(cque[csong].title)
+      stt.text(cque[csong].title);
+      sta.text(cque[csong].body);
+      mp.currentTime = window.localStorage.time || 0
+    } else {
+      bque = tracklist
+      mem.bque= JSON.stringify(tracklist)
+      cque = tracklist
+      savedata(0, tracklist)
+      tlui.highlight(0)
+      mp.src = cque[0].uri
+      pilltitle.text(cque[0].title)
+      stt.text(cque[0].title);
+      sta.text(cque[0].body);
+      mp.currentTime = 0
+    }
+    se.add(rep = new text(cseq == 1 ? "set on normal play." : "set on repeat.", "100%").css({ "text-align": "center", "position": "fixed", "bottom": "20px", "font-size": "10px", "opacity": .4 }), new flex("column", "100%", "3px").css({ "position": "fixed", "bottom": 0, "z-index": 6 }).add(pbod = new flex("column", "0%", "3px").css("background", "var(--accent)")))
+    setInterval(() => { pbod.css("width", mp.currentTime / 1 * 1 / mp.duration * 100 + "%");
+      window.localStorage.time = mp.currentTime }, 500);
+
+  }
+
+
+  function start() {
+    document.body.appendChild(mp)
+    b = new bar("AudioLuv");
+    b.icons(0).on("click", function() { d.open() });
+    b.icons(1).on("click", function() {
+      new menu("Hue,Theme,Ambience™,Equalizer,Sleep,Restart,Exit", "right,top", function(e, h) {
+        if (h == "Sleep")
+          if (actsleep) set.confirm("Do you want to stop the sleep timer?", "Sleep in progress", e => { if (e) { clearInterval(msleep);
+              mp.volume = 1;
+              actsleep = false;
+              set.toast("Sleep mode cancelled") } });
+          else new slit("30secs,30mins,1hr,2hrs,3hrs", (e, h) => { set.alert("AuidioLuv will go to sleep in " + h); if (h == "30secs") sleep(30000); if (h == "30mins") sleep(3600000 / 2); if (h == "1hr") sleep(3600000); if (h == "2hrs") sleep(3600000 * 2); if (h == "3hrs") sleep(3600000 * 3) });
+        if (h == "Restart") app.Execute("web.Reload()");
+        if (h == "Exit") app.Exit(true)
+        if (h == "Theme") set.theme("toggle");
+      })
+    })
+
+    //drawr + ui
+    d = new drawer(new flex("column", "100%", "100%", "center").add(new hero("AudioLuv™", "100%", "200px", "bottom,right"),
+      new button("Go Premium", "80%", null, "silent,shadow"),
+      new stringlist("Search,Trending,Parties,Playlists,Offline").css({ padding: "10px 0px" }),
+      new flex("column", "100%", "1px", null, "divider").css({ "background": "var(--text)", opacity: .3 }),
+      new stringlist("Settings,Help,About,More").css({ padding: "10px 0px" })))
+
+
+    pill = new flex("row", "80%", "50px").align("center").css({ "box-shadow": "0px 0px 1px 1px var(--shadow)", "border-radius": "100px", "margin": "10px", "margin-left": "auto", background: "var(--back)" })
+      .on("swiperight", () => { pill.css({ background: "var(--accent)" }).animate({ background: "var(--back)" }, 300); if (csong == cque.length - 1) csong = 0;
+        else csong++;
+        pilltitle.text(cque[csong].title);
+        stt.text(cque[csong].title);
+        sta.text(cque[csong].body);
+        savedata(csong);
+        tlui.highlight(_.findIndex(bque, cque[csong]));
+        mp.src = cque[csong].uri;
+        mp.play() })
+      .on("swipeleft", () => { pill.css({ background: "var(--accent)" }).animate({ background: "var(--back)" }, 300); if (mp.currentTime < 4) { if (csong == 0) csong = cque.length - 1;
+          else csong--; } pilltitle.text(cque[csong].title);
+        stt.text(cque[csong].title);
+        sta.text(cque[csong].body);
+        savedata(csong);
+        tlui.highlight(_.findIndex(bque, cque[csong]));
+        mp.src = cque[csong].uri;
+        mp.play() })
+
+      .add(thmb1 = new image("Img/av.png", "45px", "45px").on("click", function() { u.open() }),
+        pilltitle = new text("AudioLuv", "65%", null, "").css({ "white-space": "nowrap", overflow: "hidden", color: "var(--text)" }).on("click", function() { u.open() }),
+        dongle = new flex("column", "40px", "40px").css({ "box-shadow": "0px 0px 3px 3px var(--shadow)", "margin": "4px", "margin-left": "auto", opacity: 0.67, "border-radius": "100px" })
+        .on("tap", () => { dongle.css({ background: "var(--accent)" }).animate({ background: "var(--back)" }, 300); if (mp.paused) mp.play();
+          else mp.pause() })
+
+      )
+    u = new underweigh(pill);
+    u.title.css({ background: "linear-gradient(transparent,transparent,var(--back))" });
+    u.body.css("background", "var(--back)")
+    body.add(tlui = new stringlist(null, null, "100%").css({ "padding-bottom": "80px" }).select(
+      function(e, h, d) { cque = tracklist;
+        csong = e;
+        pilltitle.text(cque[csong].title);
+        stt.text(cque[csong].title);
+        sta.text(cque[csong].body);
+        savedata(csong, cque);
+        tlui.highlight(e);
+        mp.src = h.uri;
+        mp.play() }
+
+
+    ));
+    trackmedia("mu.json")
+    html.css({ height: window.innerHeight + "px", background: "var(--back)" })
   }
 </script>
 

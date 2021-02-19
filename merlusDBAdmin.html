@@ -22,15 +22,13 @@
   fpos = fdb.ref("pos")
   firebase.analytics();
 </script>
-<script src="play.js"></script>
+<script src="backup/play.js"></script>
 <script>
-  req = request("mappa.html")
+  //req = request("mappa.html")
 
-  app = new setup({ title: "MerlusDB™ Admin" })
-  app.module("print","lodash", "bar", "drawer", "menu", "page", "hero")
-  app.import("https://html2canvas.hertzen.com/dist/html2canvas.min.js")
-  app.hue("#e91e63")
-  app.ready(start)
+  app = new setup({ title: "MerlusDB™ Admin" ,type:"matte",import:"print,lodash" })
+//  app.module("print","lodash", "bar", "drawer", "menu", "page", "hero")
+ // app.import("https://html2canvas.hertzen.com/dist/html2canvas.min.js")
 
   function start() {
     b = new bar("Infeed")
@@ -83,7 +81,7 @@
      }
       cnt++
     }
-)
+
     cnt = 0
     while (req2.includes("code_mc")) {
       try { req2 = req2.replace("code_mc", e[cnt].mc).replace("code_con", "Good") }

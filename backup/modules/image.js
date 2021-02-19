@@ -1,6 +1,6 @@
 class image extends tag{
   constructor(src,w,h,opt){
-    super("img",w,h)
+    super("img",w,h).css({"object-fit":"cover"})
     this.src(src)
     return this
   }

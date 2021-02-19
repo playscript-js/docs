@@ -1,6 +1,7 @@
-class stringlist extends tag{
+class radio extends flex{
   constructor(lst,w,h,opt){
-    super("stringlist",w||"100%",h,null,"stringlist")
+    super("row",w||"100%",h,null,"stringlist")
+    .justify("flex-start")
     /*defaults*/
     this.opt=opt||""
     this.call=function(e,h,r,d){console.log(e,h,r,d)}
@@ -15,7 +16,7 @@ class stringlist extends tag{
     title=obj.title?new text(obj.title).css({"color":"var(--text)","font-size":obj.body?"17px":"17px","padding":"3px"}):""
     body=obj.body?new text(obj.body).css({padding:"3px",opacity:.5}):""
     img=obj.img?new image(obj.img,obj.body?"48px":"25px",obj.body?"48px":"25px").css({"margin":"4px","border-radius":"100px"}):""
-    var temp=new flex("row","100%",null,null,"listitem").css({"padding":"4px"}).add(
+    var temp=new flex("row","80px",null,null,"listitem").css({"padding":"4px"}).add(
       img,
       new flex("column","100%").add(title,body)
       

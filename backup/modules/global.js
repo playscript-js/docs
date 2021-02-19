@@ -27,7 +27,14 @@ class global {
   parent(e){ return new ref(this.raw.parentElement) }
   icon(e){var i="";if(e){this.add(i=new tag("icon").html('<i class="zmdi zmdi-' +e+'" ></i>').css({"margin":"auto", "color":"inherit"})) ;this.currentIcon=e;return i} else return this.currentIcon}
   icons(e){return new bind("#"+this.raw.querySelectorAll("icon")[e].getAttribute("id"))}
-
+  die(after=0,wanm={opacity:0},ext=300){
+    setTimeout(this.die_subset.bind(this,wanm,ext),after)
+    return this
+  }
+  die_subset(p1,p2){
+    this.animate(p1,p2,null,this.remove.bind(this))
+    return this
+  }
   /* experimental */
   
   
