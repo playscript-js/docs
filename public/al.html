@@ -104,16 +104,18 @@
                 rq=true
               load=new loader
               app.read("https://audio-love.herokuapp.com/video/"+list[pos].id,e=>{
-                alert(app.read(e))
+                //alert(app.read(e))
                // console. log(e)
+               load.close()
+               alert(e)
                 rq=false
                 curl=e
                 pque=cque;psong=csong;purl=mapd.src
                 cque=list;csong=pos;
                 disk.cque=JSON.stringify(cque);disk.csong=csong;
                 mapd.src=e
-                load.close()
-                if(e=="null")app. alert("couldnt get link");else mapd.play()
+                
+                if(e=="null")app.alert("couldnt get link");else mapd.play()
                 if(openview)view()
                 if(pdp==null){pdp=true;pill.css("display","flex");pilltext.text(cque[csong].title);pillicon.src(cque[csong].img);}
                 //notification player setup
