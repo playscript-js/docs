@@ -7,6 +7,9 @@ class flex extends tag {
     if(opt.includes("right"))this.align("flex-end")
     if(opt.includes("center"))this.align("center")
     if(opt.includes("card"))this.css({background:"var(--back)",borderRadius:"8px",boxShadow:"0px 0px 5px 5px var(--shadow)"}).align("center")
+    if(opt.includes("pill"))this.css({background:"var(--back)",borderRadius:h, padding:"5px",boxShadow:"0px 0px 5px 5px var(--shadow)"}).align("center")
+    if(opt.includes("vague"))this.css("opacity",.5)
+    if(opt.includes("margin"))this.css("margin","auto")
     return this
   }
   direction(data){this.css("flex-direction",data);return this}

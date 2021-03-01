@@ -1,5 +1,5 @@
 class setup{
-  constructor(opt,dev){
+  constructor(opt={},dev=false){
     console.log("Playscript 1.0 a0.35 final build 27.11.2020")
     /* setup obj
     {title:"Play App",
@@ -7,24 +7,24 @@ class setup{
      icon:null,
      import:"global",
      ready:start}
-     events","button","edit","flex","image","modal","dialog","stringlist","text"
+     events","button","edit","flex","image","modal","dialog","stringlist,customlist","text"
     */
     //presets
-    this.opt=opt||{}
+    this.opt=opt
     
     //handle app types
     this.opt.type=this.opt.type||"default"
     this.opt.theme=this.opt.theme||"light"
     if(this.opt.type=="core")this.opt.import=this.opt.import?"global,events,"+this.opt.import:"global,events"
-    if(this.opt.type=="default")this.opt.import=this.opt.import?"global,events,flex,text,edit,image,button,modal,dialog,stringlist,alert,confirm,prompt,toast,"+this.opt.import:"global,events,flex,text,edit,image,button,modal,dialog,stringlist,alert,confirm,prompt,toast"
-    if(this.opt.type=="matte")this.opt.import=this.opt.import?"global,events,flex,text,edit,image,button,modal,dialog,stringlist,bar,drawer,hero,menu,page,alert,confirm,prompt,snack,slit,toast,"+this.opt.import:"global,events,flex,text,edit,image,button,modal,dialog,stringlist,bar,drawer,hero,menu,page,alert,confirm,prompt,snack,slit,toast"
+    if(this.opt.type=="default")this.opt.import=this.opt.import?"global,events,flex,text,edit,image,button,modal,dialog,stringlist,customlist,alert,confirm,prompt,toast,"+this.opt.import:"global,events,flex,text,edit,image,button,modal,dialog,stringlist,customlist,alert,confirm,prompt,toast"
+    if(this.opt.type=="matte")this.opt.import=this.opt.import?"global,events,flex,text,edit,image,button,modal,dialog,stringlist,customlist,bar,drawer,hero,menu,page,alert,confirm,prompt,snack,slit,toast,"+this.opt.import:"global,events,flex,text,edit,image,button,modal,dialog,stringlist,customlist,bar,drawer,hero,menu,page,alert,confirm,prompt,snack,slit,toast"
     
     //app title
     this.title=this.opt.title||"play"
     let title=document.createElement("title");title.innerText=this.opt.title||"Play App";document.head.appendChild(title)
     this.splash;
 
-    /* auto root finder */let list = document.querySelectorAll("script");for(let i=0;i<list.length;i++){let dat=list[i].src;if(dat.endsWith("play.js")){this.root=dat.split("/");this.root.pop();this.root=this.root.join("/")+"/";continue}};window.root=this.root
+    /* auto root finder */let list = document.querySelectorAll("script");for(let i=0;i<list.length;i++){let dat=list[i].src;if(dat.endsWith("play.js")){this.root=dat.split("/");this.root.pop();this.root=this.root.join("/")+"/"};list[i].remove()};window.root=this.root
 
     
     //import dependency scripts
@@ -104,7 +104,7 @@ theme(type){
     let script = document.createElement("script");
     script.setAttribute("src", path);
     document.head.appendChild(script);
-    script.addEventListener("load", function(e){if(call)call();else console.log(path," loaded")});
+    script.addEventListener("load", function(e){script.remove();if(call)call();else console.log(path," loaded")});
   }
   //sync external scripts
   syncscript(path,call){
@@ -123,11 +123,10 @@ theme(type){
   }
   stackport(e){
         if(e.length!=0){
-        let script = document.createElement("script");
-    script.setAttribute("src",this.root+ "modules/"+e[0]+".js");
+          
+        this.script(this.root+ "modules/"+e[0]+".js",this.stackport.bind(this,e));
     e.shift()
-    document.head.appendChild(script);
-    script.addEventListener("load",this.stackport.bind(this,e))
+
         }
   }
   read(e){var f = new XMLHttpRequest();var m= null;f.open("GET", e, false);f.onreadystatechange = function (){if(f.readyState === 4){if(f.status === 200 || f.status == 0){var res= f.responseText;m= res}}};f.send(null);return m}
