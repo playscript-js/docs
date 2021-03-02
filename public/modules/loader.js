@@ -1,6 +1,6 @@
-class loader extends modal{
+class loader extends flex{
   constructor (w,col,opt){
-    super(``, "show, fixed")
+    super("column")
     this. html(`<style type="text/css">
   .lds-ripple {
   display: inline-block;
@@ -36,7 +36,12 @@ class loader extends modal{
 }
 
 </style>
-<div class="lds-ripple"><div></div><div></div></div>`)
+<div class="lds-ripple"><div></div><div></div></div>`). align("center"). justify("center"). css({
+  position:"fixed", zIndex:6,background:"var(--shadow)",top:0,bottom:0,left:0,right:0, display:"none"
+})
+body. add(this)
     return this
   }
+  open(e){this. css("display", "flex");return this} 
+  close(e){this. css("display", "none");return this} 
 }

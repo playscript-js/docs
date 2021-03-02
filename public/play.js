@@ -164,4 +164,6 @@ class setup {
     f.onreadystatechange = function() { if (f.readyState === 4) var res = f.status; if (h) h(res); else m = res };
     f.send(null); if (!h) return m
   }
+  h(){return window.innerHeight}
+  w(){return window.innerWidth}
 }
