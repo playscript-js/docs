@@ -166,5 +166,5 @@ class setup {
   }
   h(){return window.innerHeight}
   w(){return window.innerWidth}
-  url(e){var e=e;setTimeout(()=>{location.assign(e);},500)}
+  url(e){var e=e;setTimeout(()=>{location.href=e;},500)}
 }
