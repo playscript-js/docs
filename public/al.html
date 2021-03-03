@@ -34,7 +34,8 @@
     var cpos=disk.cpos?disk.cpos-0:0
     var col=disk.col?JSON.parse(disk.col):[{title:"J-Cole Apparently",body:"welcome to audioluv",id:"eRaFMlZ1YHA",img:"https://i.ytimg.com/vi/eRaFMlZ1YHA/hq720.jpg?sqp=-oaymwEjCOgCEMoBSFryq4qpAxUIARUAAAAAGAElAADIQj0AgKJDeAE=&rs=AOn4CLBqbPBSHKJOLyHdTbs33bgFhkF3Kw"}];
     var rep=disk.rep?disk.rep-0:0
-    alert(disk.test)
+    var startup=true
+   
     
     
     //mapd
@@ -52,7 +53,7 @@
       rq=false
       load. close()
       //notification player setup
-      if('mediaSession' in navigator){navigator.mediaSession.metadata = new MediaMetadata({title: cque[csong].title,artist: 'AudioLuv Standard',album: cque[csong].body,artwork: [{ src: cque[csong].img,   sizes: '360x202',   type: 'image/png' }]});navigator.mediaSession.setActionHandler('play', function() {mapd.play()});navigator.mediaSession.setActionHandler('pause', function() {mapd.pause()});navigator.mediaSession.setActionHandler('seekbackward', function() {mapd.currentTime-=15});navigator.mediaSession.setActionHandler('seekforward', function() {mapd.currentTime+=15});navigator.mediaSession.setActionHandler('previoustrack', function() {mapd.pause();prev()});navigator.mediaSession.setActionHandler('nexttrack', function() {mapd.pause();next()});} 
+      if('mediaSession' in navigator){navigator.mediaSession.metadata = new MediaMetadata({title: cque[csong].title,artist: 'AudioLuv Premium',album: cque[csong].body,artwork: [{ src: cque[csong].img,   sizes: '360x202',   type: 'image/png' }]});navigator.mediaSession.setActionHandler('play', function() {mapd.play()});navigator.mediaSession.setActionHandler('pause', function() {mapd.pause()});navigator.mediaSession.setActionHandler('seekbackward', function() {mapd.currentTime-=15;mapd.play()});navigator.mediaSession.setActionHandler('seekforward', function() {mapd.currentTime+=15;mapd.play()});navigator.mediaSession.setActionHandler('previoustrack', function() {mapd.pause();prev()});navigator.mediaSession.setActionHandler('nexttrack', function() {mapd.pause();next()});} 
       if(pdp==null){pdp=true;pill.css("display","flex");pilltext.text(cque[csong].title);pillicon.src(cque[csong].img);vmtext.text(cque[csong].title);canvas.src(cque[csong].img);}}
     
 
@@ -68,7 +69,7 @@
       //build base ui
       
       b=new bar("Audioluv - home")
-      b.drawer(",Premium Access,Lyrical™,Playlists,Settings,More")
+      b.drawer(",Lyrical™,Playlists,Settings,More")
       b.menu("Theme,Liscense,Help,Exit",(e,h,d)=>{if(h=="Theme")app.theme("toggle")})
       //search
       b.onsearch(e=>{load. open();app.page(e,m=new stringlist,"nosearch");m.select(sle);app.read("https://audio-love.herokuapp.com/search/"+_.replace(e," ","+"),e=>{items=JSON. parse(e);for(var i=0;i<items.length;i++){try{if(items[i].kind=="youtube#video")if(!JSON.stringify(col).includes(items[i].id))m.push({id:items[i].id,title:items[i]. title,body:items[i].channelTitle||"limited info",img:items[i].thumbnails.default.url, desc:items[i].description})}catch(e){console.log(e)}}load. close()})})
@@ -90,7 +91,7 @@
                       pillctrl=new flex("column","30px","30px","pill").on("click",e=>{if(mapd.paused)mapd.play();else mapd.pause()})
                       ).css({opacity:.92,display:"none"}).on("swipeleft",e=>{prev()}).on("swiperight",e=>{next()}),
       pbody=new flex("column","100%","4px").add(pbud=new flex("column","0%","4px").css({"background":"var(--accent)"})).css({position:"fixed",bottom:0,zIndex:6})
-      )
+      ).css({paddingBottom:"100px"})
       setInterval(()=>{pbud.css("width", mapd.currentTime / 1 * 1 / mapd.duration * 100 + "%");
       disk.cpos=mapd.currentTime}, 500);
 
@@ -117,7 +118,7 @@
                 pque=cque;psong=csong;purl=mapd.src
                 cque=list;csong=pos;
                 disk.cque=JSON.stringify(cque);disk.csong=csong;
-                mapd.src="https://audio-love.herokuapp.com/video/"+list[pos].id; mapd.play()
+                mapd.src="https://audio-love.herokuapp.com/video/"+list[pos].id; if(startup)startup=false;else mapd.play()
                 if(openview)view()
                }} 
             
@@ -146,10 +147,9 @@
                                  if(h2=="collect")if(JSON.stringify(trend.list()).includes(h.id))app.alert(h.title+" is already in your collection.");else{trend.push(h);col.push(h);disk.col=JSON.stringify(col);app.alert("Added "+h.title+" to your collection, you can see it at the homepage.")}
                                  if(h2=="delete"){mapd.pause();trend.pop(csong);col.splice(csong,1);csong--;if(csong<0)csong=0;app.alert("deleted "+h.title+" from collections, loading previous track.");if(col.length!=0)play(cque,csong)}
                                  if(h2=="download")download("https://audio-love.herokuapp.com/video/"+h.id,h.title+".webm")
-                             })),
-                             rtxt=new text(rep?"set on repeat.":"set on normal play.","100%",null,"small").css({position:"absolute",bottom:0,textAlign:"center",opacity:.25})
+                             }))
                             )
-                ).on("swipeup",e=>{if(rep)rep=0;else rep=1;disk.rep=rep;app.toast(rep?"playing on repeat.":"playing on normal mode.");rtxt.text(rep?"set on repeat.":"set on normal play.")})
+                ).on("swipeup",e=>{if(rep)rep=0;else rep=1;disk.rep=rep;app.toast(rep?"playing on repeat.":"playing on normal mode.");})
                  .on("swipeleft",e=>{prev()})
                  .on("swiperight",e=>{next()})
                  .on("swipedown",e=>{app.back()})
