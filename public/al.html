@@ -69,7 +69,7 @@
       //build base ui
       
       b=new bar("Audioluv - search")
-      b.drawer(",Lyrical™,Playlists,Settings,More")
+      b.drawer(",Recents,Lyrical™,Playlists,Settings,More")
       b.menu("Theme,Liscense,Help,Exit",(e,h,d)=>{if(h=="Theme")app.theme("toggle")})
       //search
       b.onsearch(e=>{load. open();app.page(e,m=new stringlist,"nosearch");m.select(sle);app.read("https://audio-love.herokuapp.com/search/"+_.replace(e," ","+"),e=>{items=JSON. parse(e);for(var i=0;i<items.length;i++){try{if(items[i].kind=="youtube#video")if(!JSON.stringify(col).includes(items[i].id))m.push({id:items[i].id,title:items[i]. title,body:items[i].channelTitle||"limited info",img:items[i].thumbnails.default.url, desc:items[i].description})}catch(e){console.log(e)}}load. close()})})
