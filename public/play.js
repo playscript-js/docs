@@ -166,5 +166,5 @@ class setup {
   }
   h(){return window.innerHeight}
   w(){return window.innerWidth}
-  url(e){location.assign(e);return this}
+  url(e){location.assign(e);}
 }
