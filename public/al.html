@@ -68,7 +68,7 @@
       
       //build base ui
       
-      b=new bar("Audioluv - home")
+      b=new bar("Audioluv - search")
       b.drawer(",Lyrical™,Playlists,Settings,More")
       b.menu("Theme,Liscense,Help,Exit",(e,h,d)=>{if(h=="Theme")app.theme("toggle")})
       //search
@@ -98,15 +98,15 @@
       
             }
             
-            function sle(pos,h,d,full){
-          new modal(new flex("column","80%",null,"card").add(
+            function sle(pos,h,d,full,v){
+          new modal(new flex("column","80%",null,"scrollcard").add(
           new image(h.img,"100%"),
           new text(h.title,"90%","null","large,accent"),
           new text(h.desc,"90%",null,"small"),
-          new flex("row","90%").add(dlplay=new button(h.id==cque[csong].id?mapd.paused?"play":"pause":"listen","100%",null,"silent").on("click",e=>{if(h.id==cque[csong].id){ if(mapd.paused)mapd.play();else mapd.pause()}else{openview=true;app.back();play(full,pos)}}),
+          new flex("row","90%").add(v?"":dlplay=new button(h.id==cque[csong].id?mapd.paused?"play":"pause":"listen","100%",null,"silent").on("click",e=>{if(h.id==cque[csong].id){ if(mapd.paused)mapd.play();else mapd.pause()}else{openview=true;app.back();play(full,pos)}}),
           //new button("download","100%",null,"silent,shadow").on("click",e=>{app.download(h.title+".webm",curl);app.snack("Downloading...")})
           )
-          ), "show")
+          ).css({"max-height":"90%","max-width":"300px"}), "show")
             }
             
             
@@ -142,11 +142,13 @@
                 bottom=new flex("row","100%","20%").align("center").justify("center").add(
                              new flex("column","25px","25px","pill,margin").on("click",e=>app.page("Currently playing",new stringlist(cque,"100%","100%").select((e,h,d,r)=>{app.back();play(r,e)}),"nosearch")),
                              new flex("column","100px","30px","pill,margin").on("click",e=>{if(mapd.paused)mapd.play();else mapd.pause()}),
-                             new flex("column","25px","25px","pill,margin").on("click",e=>app.slit(JSON.stringify(trend.list()).includes(cque[csong].id)?"info,edit,lyrics,download":"info,collect,lyrics,download",(e,h2,d)=>{
+                             new flex("column","25px","25px","pill,margin").on("click",e=>app.slit(JSON.stringify(trend.list()).includes(cque[csong].id)?"info,watch on YouTube,download":"info,collect,watch on YouTube,download",(e,h2,d)=>{
                                h=cque[csong]
                                  if(h2=="collect")if(JSON.stringify(trend.list()).includes(h.id))app.alert(h.title+" is already in your collection.");else{trend.push(h);col.push(h);disk.col=JSON.stringify(col);app.alert("Added "+h.title+" to your collection, you can see it at the homepage.")}
                                  if(h2=="delete"){mapd.pause();trend.pop(csong);col.splice(csong,1);csong--;if(csong<0)csong=0;app.alert("deleted "+h.title+" from collections, loading previous track.");if(col.length!=0)play(cque,csong)}
                                  if(h2=="download")download("https://audio-love.herokuapp.com/video/"+h.id,h.title+".webm")
+                                 if(h2=="info")sle(0,h,null,null,true)
+                                 if(h2=="watch on YouTube")app.url("https://www.youtube.com/watch?v="+h.id)
                              }))
                             )
                 ).on("swipeup",e=>{if(rep)rep=0;else rep=1;disk.rep=rep;app.toast(rep?"playing on repeat.":"playing on normal mode.");})
