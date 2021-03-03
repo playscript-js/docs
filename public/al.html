@@ -29,10 +29,11 @@
     *applied on both trend search and collection
     @ params {cque}
     */
-    var cque=disk.cque?JSON.parse(disk.cque):[{title:"J-Cole Apparently",body:"welcome to audioluv",id:"eRaFMlZ1YHA",img:"https://i.ytimg.com/vi/eRaFMlZ1YHA/hq720.jpg?sqp=-oaymwEjCOgCEMoBSFryq4qpAxUIARUAAAAAGAElAADIQj0AgKJDeAE=&rs=AOn4CLBqbPBSHKJOLyHdTbs33bgFhkF3Kw"}];
+    var temp=[{title:"J-Cole Apparently",body:"welcome to audioluv",id:"eRaFMlZ1YHA",img:"https://i.ytimg.com/vi/eRaFMlZ1YHA/hq720.jpg?sqp=-oaymwEjCOgCEMoBSFryq4qpAxUIARUAAAAAGAElAADIQj0AgKJDeAE=&rs=AOn4CLBqbPBSHKJOLyHdTbs33bgFhkF3Kw"}]
+    var cque=disk.cque?JSON.parse(disk.cque):temp
     var csong=disk.csong?disk.csong-0:0;
     var cpos=disk.cpos?disk.cpos-0:0
-    var col=disk.col?JSON.parse(disk.col):[{title:"J-Cole Apparently",body:"welcome to audioluv",id:"eRaFMlZ1YHA",img:"https://i.ytimg.com/vi/eRaFMlZ1YHA/hq720.jpg?sqp=-oaymwEjCOgCEMoBSFryq4qpAxUIARUAAAAAGAElAADIQj0AgKJDeAE=&rs=AOn4CLBqbPBSHKJOLyHdTbs33bgFhkF3Kw"}];
+    var col=disk.col?JSON.parse(disk.col):temp
     var rep=disk.rep?disk.rep-0:0
     var startup=true
    
@@ -42,10 +43,8 @@
     mapd=new Audio
     mapd.style.display ="none"
     mapd.id="hello"
-    mapd.onplay=e=>{dlplay.text("pause");pilltext.css("color","var(--accent)").text(cque[csong].title);pillicon.src(cque[csong].img);canvas.src(cque[csong].img);try{vmtext.text(cque[csong].title).css("color","var(--accent)")}
-    catch(e){}}
-    mapd.onpause=e=>{dlplay.text("play");pilltext.css("color","var(--text)");try{vmtext.css("color","var(--text)")}
-    catch(e){}}
+    mapd.onplay=e=>{dlplay.text("pause");pilltext.css("color","var(--accent)").text(cque[csong].title);pillicon.src(cque[csong].img);canvas.src(cque[csong].img);vmtext.text(cque[csong].title).css("color","var(--accent)")}
+    mapd.onpause=e=>{dlplay.text("play");pilltext.css("color","var(--text)");vmtext.css("color","var(--text)")}
     mapd.onerror=e=>{rq=false;load.close();app.alert("Unsupported track, link probably expired...or something.");}
     mapd.onended=e=>{if(rep){mapd.currentTime=0;mapd.play()}else next()}
     mapd.currentTime=disk.cpos-0||0
@@ -61,7 +60,7 @@
     function start(e){
       body.add(mapd)
       //empty tags
-      vmtext=new tag("empty");dlplay=new tag("empty")
+      vmtext=new tag("empty");dlplay=new tag("empty");pilltext=new tag("empty");pillicon=new image(".png")
       load=new loader
       canvas=new image(cque[csong].img,null,"50%").css({borderRadius:"8px",boxShadow:"0px 0px 8px 8px var(--shadow)"})
      // html.remove(canvas)
@@ -90,10 +89,15 @@
                       pilltext=new text("Audioluv","75%",null,"small,oneline,cut").on("click",e=>view()).css("margin-right","auto"),
                       pillctrl=new flex("column","30px","30px","pill").on("click",e=>{if(mapd.paused)mapd.play();else mapd.pause()})
                       ).css({opacity:.92,display:"none"}).on("swipeleft",e=>{prev()}).on("swiperight",e=>{next()}),
-      pbody=new flex("column","100%","4px").add(pbud=new flex("column","0%","4px").css({"background":"var(--accent)"})).css({position:"fixed",bottom:0,zIndex:6})
+      pbody=new flex("column","100%","4px").add(pbud=new flex("column","0%","4px").css({"background":"var(--accent)"})).css({position:"fixed",bottom:0,zIndex:6}),
+      nodata=new text("collection empty","90%").css({color:"var(--accent)",textAlign:"center",display:"none"})
       ).css({paddingBottom:"100px"})
-      setInterval(()=>{pbud.css("width", mapd.currentTime / 1 * 1 / mapd.duration * 100 + "%");
-      disk.cpos=mapd.currentTime}, 500);
+      setInterval(()=>{
+        pbud.css("width", mapd.currentTime / 1 * 1 / mapd.duration * 100 + "%");
+        disk.cpos=mapd.currentTime
+        if(trend.list().length==0)nodata.css("display","block");else nodata.css("display","none")
+        
+      }, 500);
 
       
             }
@@ -110,7 +114,7 @@
             }
             
             
-            function play(list,pos){
+            function play(list,pos,opt){
               if(!rq){
                 rq=true
               load. open()
@@ -118,7 +122,8 @@
                 pque=cque;psong=csong;purl=mapd.src
                 cque=list;csong=pos;
                 disk.cque=JSON.stringify(cque);disk.csong=csong;
-                mapd.src="https://audio-love.herokuapp.com/video/"+list[pos].id; if(startup)startup=false;else mapd.play()
+                pilltext.text(cque[csong].title);pillicon.src(cque[csong].img);canvas.src(cque[csong].img);vmtext.text(cque[csong].title)
+                mapd.src="https://audio-love.herokuapp.com/video/"+list[pos].id; if(startup)startup=false;else if(!opt)mapd.play()
                 if(openview)view()
                }} 
             
@@ -127,7 +132,7 @@
               if(!rq){csong++;if(csong>cque.length-1)csong=0;play(cque,csong)}
             }
             function prev(e){
-              if(!rq){csong--;if(csong<0)csong=cque.length-1;play(cque,csong)}
+              if(!rq){if(mapd.currentTime<4)csong--;if(csong<0)csong=cque.length-1;play(cque,csong)}
             }
             
             
@@ -142,10 +147,23 @@
                 bottom=new flex("row","100%","20%").align("center").justify("center").add(
                              new flex("column","25px","25px","pill,margin").on("click",e=>app.page("Currently playing",new stringlist(cque,"100%","100%").select((e,h,d,r)=>{app.back();play(r,e)}),"nosearch")),
                              new flex("column","100px","30px","pill,margin").on("click",e=>{if(mapd.paused)mapd.play();else mapd.pause()}),
-                             new flex("column","25px","25px","pill,margin").on("click",e=>app.slit(JSON.stringify(trend.list()).includes(cque[csong].id)?"info,watch on YouTube,download":"info,collect,watch on YouTube,download",(e,h2,d)=>{
-                               h=cque[csong]
+                             new flex("column","25px","25px","pill,margin").on("click",e=>app.slit(JSON.stringify(trend.list()).includes(cque[csong].id)?"info,watch on YouTube,delete,download":"info,collect,watch on YouTube,download",(e,h2,d)=>{
+                               h=cque[csong];x=csong
                                  if(h2=="collect")if(JSON.stringify(trend.list()).includes(h.id))app.alert(h.title+" is already in your collection.");else{trend.push(h);col.push(h);disk.col=JSON.stringify(col);app.alert("Added "+h.title+" to your collection, you can see it at the homepage.")}
-                                 if(h2=="delete"){mapd.pause();trend.pop(csong);col.splice(csong,1);csong--;if(csong<0)csong=0;app.alert("deleted "+h.title+" from collections, loading previous track.");if(col.length!=0)play(cque,csong)}
+                                 if(h2=="delete"){
+                                   var pos=_.findIndex(col,{id:h.id})
+                                   if(JSON.stringify(cque)==JSON.stringify(col)){
+                                       col.splice(pos,1)
+                                       cque.splice(pos,1)
+                                       if(csong>=pos)csong--;if(csong<0)csong=0;
+                                       trend.list(col)
+                                       if(col.length>0)play(cque,csong);else play(temp,0)
+                                   }else{
+                                     col.splice(pos,1)
+                                     trend.list(col)
+                                   }
+                                   
+                                 }
                                  if(h2=="download")download("https://audio-love.herokuapp.com/video/"+h.id,h.title+".webm")
                                  if(h2=="info")sle(0,h,null,null,true)
                                  if(h2=="watch on YouTube")app.url("https://www.youtube.com/watch?v="+h.id)
