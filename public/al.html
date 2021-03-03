@@ -16,7 +16,7 @@
       type:"matte",
       theme:"light"
     })
-    app.script("wave.js")
+    
     
     //set defaults
     var dlplay,pdp,vm,openview,rtxt,isc=null
@@ -34,7 +34,7 @@
     var cpos=disk.cpos?disk.cpos-0:0
     var col=disk.col?JSON.parse(disk.col):[{title:"J-Cole Apparently",body:"welcome to audioluv",id:"eRaFMlZ1YHA",img:"https://i.ytimg.com/vi/eRaFMlZ1YHA/hq720.jpg?sqp=-oaymwEjCOgCEMoBSFryq4qpAxUIARUAAAAAGAElAADIQj0AgKJDeAE=&rs=AOn4CLBqbPBSHKJOLyHdTbs33bgFhkF3Kw"}];
     var rep=disk.rep?disk.rep-0:0
-    
+    alert(disk.test)
     
     
     //mapd
@@ -55,19 +55,14 @@
       if('mediaSession' in navigator){navigator.mediaSession.metadata = new MediaMetadata({title: cque[csong].title,artist: 'AudioLuv Standard',album: cque[csong].body,artwork: [{ src: cque[csong].img,   sizes: '360x202',   type: 'image/png' }]});navigator.mediaSession.setActionHandler('play', function() {mapd.play()});navigator.mediaSession.setActionHandler('pause', function() {mapd.pause()});navigator.mediaSession.setActionHandler('seekbackward', function() {mapd.currentTime-=15});navigator.mediaSession.setActionHandler('seekforward', function() {mapd.currentTime+=15});navigator.mediaSession.setActionHandler('previoustrack', function() {mapd.pause();prev()});navigator.mediaSession.setActionHandler('nexttrack', function() {mapd.pause();next()});} 
       if(pdp==null){pdp=true;pill.css("display","flex");pilltext.text(cque[csong].title);pillicon.src(cque[csong].img);vmtext.text(cque[csong].title);canvas.src(cque[csong].img);}}
     
-    //clog services
-    setInterval(e=>{
-      disk.cpos=mapd.currentTime
-      //if(vm.raw)pill.css("display","none");else pill.css("display","flex");
-      
-    },500)
+
    
     function start(e){
       body.add(mapd)
       //empty tags
       vmtext=new tag("empty");dlplay=new tag("empty")
       load=new loader
-      canvas=new image(cque[csong].img,null,"100%")
+      canvas=new image(cque[csong].img,null,"50%").css({borderRadius:"8px",boxShadow:"0px 0px 8px 8px var(--shadow)"})
      // html.remove(canvas)
       
       //build base ui
@@ -93,8 +88,12 @@
                       pillicon=new image(".png","40px","40px","round").on("click",e=>view()),
                       pilltext=new text("Audioluv","75%",null,"small,oneline,cut").on("click",e=>view()).css("margin-right","auto"),
                       pillctrl=new flex("column","30px","30px","pill").on("click",e=>{if(mapd.paused)mapd.play();else mapd.pause()})
-                      ).css({opacity:.92,display:"none"}).on("swipeleft",e=>{prev()}).on("swiperight",e=>{next()})
+                      ).css({opacity:.92,display:"none"}).on("swipeleft",e=>{prev()}).on("swiperight",e=>{next()}),
+      pbody=new flex("column","100%","4px").add(pbud=new flex("column","0%","4px").css({"background":"var(--accent)"})).css({position:"fixed",bottom:0,zIndex:6})
       )
+      setInterval(()=>{pbud.css("width", mapd.currentTime / 1 * 1 / mapd.duration * 100 + "%");
+      disk.cpos=mapd.currentTime}, 500);
+
       
             }
             
@@ -105,10 +104,7 @@
           new text(h.desc,"90%",null,"small"),
           new flex("row","90%").add(dlplay=new button(h.id==cque[csong].id?mapd.paused?"play":"pause":"listen","100%",null,"silent").on("click",e=>{if(h.id==cque[csong].id){ if(mapd.paused)mapd.play();else mapd.pause()}else{openview=true;app.back();play(full,pos)}}),
           //new button("download","100%",null,"silent,shadow").on("click",e=>{app.download(h.title+".webm",curl);app.snack("Downloading...")})
-          ),
-          new button("more","90%").on("click",e=>{app.slit("info,collect,share,send,report",(e,h2,d)=>{
-                               if(h2=="collect")if(JSON.stringify(trend.list()).includes(h.id))app.alert(h.title+" is already in your collection.");else{trend.push(h);col.push(h);disk.col=JSON.stringify(col);app.alert("Added "+h.title+" to your collection, you can see it at the homepage.")}
-          })})
+          )
           ), "show")
             }
             
@@ -117,6 +113,7 @@
               if(!rq){
                 rq=true
               load. open()
+              mapd.pause();mapd.currentTime=0
                 pque=cque;psong=csong;purl=mapd.src
                 cque=list;csong=pos;
                 disk.cque=JSON.stringify(cque);disk.csong=csong;
@@ -140,23 +137,46 @@
                 top=new flex("column","100%","20%").align("center").justify("center").add(
                              vmtext=new text(cque[csong].title,null,null,"large").css({fontSize:"30px",textAlign:"center",color:mapd.paused?"var(--text)":"var(--accent)"})
                              ),
-                center=new flex("column","100%","60%").add(canvas,new flex("column","100%","10%").css({position:"absolute",background:"linear-gradient(var(--back),var(--back),transparent)",top:"20.5%"}),new flex("column","100%","10%").css({position:"absolute",background:"linear-gradient(transparent,var(--back),var(--back))",bottom:"18%"})).align("center").justify("center"),
+                center=new flex("column","100%","60%").add(canvas).align("center").justify("center"),
                 bottom=new flex("row","100%","20%").align("center").justify("center").add(
                              new flex("column","25px","25px","pill,margin").on("click",e=>app.page("Currently playing",new stringlist(cque,"100%","100%").select((e,h,d,r)=>{app.back();play(r,e)}),"nosearch")),
                              new flex("column","100px","30px","pill,margin").on("click",e=>{if(mapd.paused)mapd.play();else mapd.pause()}),
-                             new flex("column","25px","25px","pill,margin").on("click",e=>app.slit(JSON.stringify(trend.list()).includes(cque[csong].id)?"info,edit,lyrics,AudiVision™":"info,collect,lyrics,AudiVision™",(e,h2,d)=>{
+                             new flex("column","25px","25px","pill,margin").on("click",e=>app.slit(JSON.stringify(trend.list()).includes(cque[csong].id)?"info,edit,lyrics,download":"info,collect,lyrics,download",(e,h2,d)=>{
                                h=cque[csong]
                                  if(h2=="collect")if(JSON.stringify(trend.list()).includes(h.id))app.alert(h.title+" is already in your collection.");else{trend.push(h);col.push(h);disk.col=JSON.stringify(col);app.alert("Added "+h.title+" to your collection, you can see it at the homepage.")}
                                  if(h2=="delete"){mapd.pause();trend.pop(csong);col.splice(csong,1);csong--;if(csong<0)csong=0;app.alert("deleted "+h.title+" from collections, loading previous track.");if(col.length!=0)play(cque,csong)}
-                                 
+                                 if(h2=="download")download("https://audio-love.herokuapp.com/video/"+h.id,h.title+".webm")
                              })),
                              rtxt=new text(rep?"set on repeat.":"set on normal play.","100%",null,"small").css({position:"absolute",bottom:0,textAlign:"center",opacity:.25})
                             )
                 ).on("swipeup",e=>{if(rep)rep=0;else rep=1;disk.rep=rep;app.toast(rep?"playing on repeat.":"playing on normal mode.");rtxt.text(rep?"set on repeat.":"set on normal play.")})
                  .on("swipeleft",e=>{prev()})
                  .on("swiperight",e=>{next()})
+                 .on("swipedown",e=>{app.back()})
                  
             }
+            
+            function download(uri, name) 
+{
+    app.snack("downloading "+name)
+    dl=new loader
+    fetch(uri)
+  .then(resp => resp.blob())
+  .then(blob => {
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.style.display = 'none';
+    a.href = url;
+    // the filename you want
+    a.download = name;
+    document.body.appendChild(a);
+    a.click();
+    window.URL.revokeObjectURL(url);
+    app.snack(name+" downloaded.")
+    dl.close()
+  })
+  .catch(() => {dl.close();app.alert("Couldn't download "+name)});
+}
             
             
 </script>
