@@ -20,10 +20,9 @@ class setup {
     if (this.opt.type == "matte") this.opt.import = this.opt.import ? "global,events,flex,text,edit,image,button,modal,dialog,stringlist,customlist,bar,drawer,hero,menu,page,alert,confirm,prompt,snack,slit,toast," + this.opt.import : "global,events,flex,text,edit,image,button,modal,dialog,stringlist,customlist,bar,drawer,hero,menu,page,alert,confirm,prompt,snack,slit,toast"
 
     //app title
-    this.title = this.opt.title || "play"
-    let title = document.createElement("title");
-    title.innerText = this.opt.title || "Play App";
-    document.head.appendChild(title)
+    this.titleInt = document.createElement("title");
+    this.titleInt.innerText = this.opt.title || this.opt.nosplash
+    document.head.appendChild(this.titleInt)
     this.splash;
 
     /* auto root finder */
@@ -41,6 +40,11 @@ class setup {
 
     //on ready
     window.addEventListener("load", this.start.bind(this))
+    
+    
+    //search for url paramsvar search = location.search.substring(1);
+    var search = location.search.substring(1);
+    if(search)this.params=JSON.parse('{"' + decodeURI(search).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}')
 
   }
 
@@ -166,5 +170,10 @@ class setup {
   }
   h(){return window.innerHeight}
   w(){return window.innerWidth}
+  title(e){this.titleInt.innerText=e}
   url(e){var e=e;setTimeout(()=>{location.href=e;},50)}
+  get(e, h){var f = new XMLHttpRequest();var m = null;f.open("GET", e, h ? true : false);f.onreadystatechange = function() { if (f.readyState === 4) var res = f; if (h) h(res); else m = res };f.send(null); if (!h) return m}
+  host(e){if(e){if(window.location.hostname==e)return true; else return false}else return window.location.hostname}
+  
+  
 }
