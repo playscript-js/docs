@@ -15,6 +15,8 @@ class text extends tag {
     if(opt.includes("accent"))this.css("color","var(--accent)")
     if(opt.includes("oneline"))this.css("white-space","nowrap")
     if(opt.includes("cut"))this.css("overflow","hidden")
+    if(opt.includes("center"))this.css("text-align","center")
+
 
     this.css({width:w,height:h,padding:"8px"})
     return this

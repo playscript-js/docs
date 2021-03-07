@@ -20,82 +20,10 @@
      
      
      function start(e){
-       h=app.params
-       html.add(vm=new flex("column","100%","100%").align("center").justify("center").css({position:"fixed",top:0,bottom:0,left:0,right:0})
-              .add(
-                top=new flex("column","100%","20%").align("center").justify("center").add(
-                             vmtext=new text(h.t,null,null,"html").css({fontSize:"30px",textAlign:"center",color:mapd.paused?"var(--text)":"var(--accent)"})
-                             ),
-                center=new flex("column","100%","60%").add(canvas=new image(h.p,null,"50%").css({borderRadius:"8px",boxShadow:"0px 0px 8px 8px var(--shadow)"})).align("center").justify("center"),
-                bottom=new flex("row","100%","20%").align("center").justify("center").add(
-                             
-                             new flex("column","100px","30px","pill,margin").on("click",e=>{if(mapd.paused)mapd.play();else mapd.pause()})
-                             
-                             ))
-                            )
-                ).on("swipeup",e=>{if(rep)rep=0;else rep=1;disk.rep=rep;app.toast(rep?"playing on repeat.":"playing on normal mode.");})
-                 .on("swipeleft",e=>{prev()})
-                 .on("swiperight",e=>{next()})
-                 .on("swipedown",e=>{app.back()}))
-                 
+       console.warn(body.add(new text("loading...","100%","100%","center,accent")).html())
+       
+       
      }
-     
-     function sle(pos,h,d,full,v){
-          new modal(new flex("column","80%",null,"scrollcard").add(
-          new image(h.img,"100%"),
-          new text(h.title,"90%","null","large,accent"),
-          new text(h.desc,"90%",null,"small"),
-          new flex("row","90%").add(dlplay=new button(h.id==cque[csong].id?mapd.paused?"play":"pause":"listen","100%",null,"silent").on("click",e=>{if(h.id==cque[csong].id){ if(mapd.paused)mapd.play();else mapd.pause()}else{openview=true;app.back();play(full,pos)}}),
-          //new button("download","100%",null,"silent,shadow").on("click",e=>{app.download(h.title+".webm",curl);app.snack("Downloading...")})
-          )
-          ).css({"max-height":"90%","max-width":"300px"}), "show")
-            }
-            
-            
-            function play(list,pos,opt){
-              if(!rq){
-                rq=true
-              load. open()
-              mapd.pause();mapd.currentTime=0
-                pque=cque;psong=csong;purl=mapd.src
-                cque=list;csong=pos;
-                disk.cque=JSON.stringify(cque);disk.csong=csong;
-                pilltext.text(cque[csong].title);pillicon.src(cque[csong].img);canvas.src(cque[csong].img);vmtext.text(cque[csong].title)
-                mapd.src="https://audio-love.herokuapp.com/video/"+list[pos].id; if(startup)startup=false;else if(!opt)mapd.play()
-                if(openview)view()
-               }} 
-            
-            
-            function next(e){
-              if(!rq){csong++;if(csong>cque.length-1)csong=0;play(cque,csong)}
-            }
-            function prev(e){
-              if(!rq){if(mapd.currentTime<4)csong--;if(csong<0)csong=cque.length-1;play(cque,csong)}
-            }
-            
-            
-            
-            
-            function download(uri, name) 
-{
-    app.snack("downloading "+name)
-    
-    fetch(uri)
-  .then(resp => resp.blob())
-  .then(blob => {
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.style.display = 'none';
-    a.href = url;
-    // the filename you want
-    a.download = name;
-    document.body.appendChild(a);
-    a.click();
-    window.URL.revokeObjectURL(url);
-    app.snack(name+" downloaded.")
-  })
-  .catch(() => {app.alert("Couldn't download "+name)});
-}
        
     
     
