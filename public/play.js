@@ -80,7 +80,7 @@ class setup {
     opacity: 0;
   }
 }</style><div class="lds-spinner"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div></doc_log>`)
-    console.log("Playscript 1.0 a0.35 final build 27.11.2020")
+    console.log("Playscript 1.0 a0.36 final build 27.11.2020")
     /* setup obj
     {title:"Play App",
      subtitle:null,
